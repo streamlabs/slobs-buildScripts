@@ -1,3 +1,6 @@
+# Description
+This project contains a collection of `bash` scripts that will build various streamlabs projects like streamlabs/obs-studio for *mac* & install it in other projects.
+
 # How to use
 Install this folder in the same directory right beside streamlabs-desktop, streamlabs-obs-studio, and streamlabs/obs-studio-node. This project contains `bash` scripts
 
