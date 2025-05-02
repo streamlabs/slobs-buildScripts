@@ -13,5 +13,5 @@ root
 ```
 
 # Testing SLOBS changes in obs-studio-node
-Run `update-everything-from-SLOBS.sh` script to build slobs & then `obs-studio-node`. Now when you execute the `yarn run test` command in OSN directory, it will utilize the latest build automatically. In addition, *desktop* will also be updated.
+Run `update-everything-from-SLOBS.sh` script to build `streamlabs/obs-studio` & `obs-studio-node`. The resulting artifacts will be copied into `streamlabs/desktop`. Now when you execute the `yarn run test` command in OSN directory, it will utilize the latest build automatically. In addition, *desktop* will also be updated.
 
