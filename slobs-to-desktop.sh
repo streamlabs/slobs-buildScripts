@@ -1,5 +1,9 @@
 cd ../obs-studio/
 
+echo "Remove old artifacts to ensure they are properly replaced"
+rm -rf ./build_macos/packed_build/OBS.app
+rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
+
 echo "Time to run xcodebuild"
 #xcodebuild -project obs-studio.xcodeproj -target obs-studio -destination "generic/platform=macOS,name=Any Mac" -configuration RelWithDebInfo -parallelizeTargets -hideShellScriptEnvironment build
 cmake --build --target install --preset macos -v
