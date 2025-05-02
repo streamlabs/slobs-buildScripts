@@ -21,17 +21,3 @@ if [ $exit_status -eq 0 ]; then
 else
   echo "building osn failed with exit code $exit_status."
 fi
-
-
-
-# echo "Time to run xcodebuild"
-# cd /Users/rosbo/projects/streamlabs/obs-studio-node/streamlabs-build.app
-
-# xcodebuild -project obs-studio-node.xcodeproj -target obs-studio-server -destination "generic/platform=macOS,name=Any Mac" -configuration RelWithDebInfo -parallelizeTargets -hideShellScriptEnvironment build
-# cp obs-studio-server/RelWithDebInfo/obs64 ../../desktop/node_modules/obs-studio-node/bin
-
-# echo "Time to run xcodebuild on obs-node-client"
-# xcodebuild -project obs-studio-node.xcodeproj -target obs_studio_client -destination "generic/platform=macOS,name=Any Mac" -configuration RelWithDebInfo -parallelizeTargets -hideShellScriptEnvironment build
-# cp obs-studio-client/RelWithDebInfo/obs_studio_client.0.3.21.0.node ../../desktop/node_modules/obs-studio-node
-# cp obs-studio-client/RelWithDebInfo/obs_studio_client.node ../../desktop/node_modules/obs-studio-node
-
