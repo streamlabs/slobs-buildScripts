@@ -12,15 +12,11 @@ exit_status=$?
 
 if [ $exit_status -eq 0 ]; then
     # now copy into desktop
-    echo "Now copying libs"
-    #cp  ./libobs-opengl/RelWithDebInfo/libobs-opengl.dylib ../../desktop/node_modules/obs-studio-node/Frameworks
-
-    # cant copy libobs-- I think I need to copy ovber everything else first
+    echo "Now copying into streamlabs/desktop"
     rm -rf ./../desktop/node_modules/obs-studio-node/Frameworks
-    #cp  -R ./build_macos/UI/RelWithDebInfo/OBS.app/Contents/Frameworks ../desktop/node_modules/obs-studio-node
-
-    # copy into desktop
     cp  -R ./build_macos/packed_build/OBS.app/Contents/Frameworks ../desktop/node_modules/obs-studio-node
+    cp  -R ./build_macos/packed_build/OBS.app/Contents/Library ../desktop/node_modules/obs-studio-node
+
     # copy to OSN
     rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/Frameworks
     cp  -R ./build_macos/packed_build/OBS.app/Contents/Frameworks ../obs-studio-node/streamlabs-build.app/libobs-src/
