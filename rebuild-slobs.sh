@@ -1,5 +1,6 @@
+#!/bin/bash
 cd ../obs-studio/
 
 rm -rf build_macos
-cmake --preset macos -DCMAKE_INSTALL_PREFIX=build_macos/packed_build
+cmake --preset macos -DCMAKE_INSTALL_PREFIX=build_macos/packed_build -DOBS_PROVISIONING_PROFILE="$OBS_PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$OBS_CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$OBS_CODESIGN_IDENTITY"
 
