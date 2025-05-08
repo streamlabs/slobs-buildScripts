@@ -18,12 +18,14 @@ if [ $exit_status -eq 0 ]; then
     cp  -R ./build_macos/packed_build/OBS.app/Contents/Library ../desktop/node_modules/obs-studio-node
 
     # copy to OSN
-    rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/Frameworks
-    cp  -R ./build_macos/packed_build/OBS.app/Contents/Frameworks ../obs-studio-node/streamlabs-build.app/libobs-src/
+    # Disabled removing the previous artifact. This will require Obs-studio-node xcodeproj to be rebuilt because it cant find obs.h
+    #rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/Frameworks
+    cp -R ./build_macos/packed_build/OBS.app/Contents/Frameworks ../obs-studio-node/streamlabs-build.app/libobs-src/
     cp -R ./build_macos/packed_build/OBS.app ../obs-studio-node/streamlabs-build.app/libobs-src
 
-    rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/include
-    rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/lib
+    # Disabled removing the previous artifact. This will require Obs-studio-node xcodeproj to be rebuilt because it cant find obs.h
+    #rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/include
+    #rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/lib
     cp  -R ./build_macos/packed_build/include ../obs-studio-node/streamlabs-build.app/libobs-src/
     cp  -R ./build_macos/packed_build/lib ../obs-studio-node/streamlabs-build.app/libobs-src/
 else
