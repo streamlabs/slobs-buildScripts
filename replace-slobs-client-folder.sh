@@ -4,6 +4,7 @@
 
 if [ $# -eq 0 ]; then
   echo "No arguments provided. Please provide the name of the slobs-client folder you wish to copy over"
+  echo "Example: ./replace-slobs-client-folder.sh ~/Downloads/2025-05-05T18_57_11.377Z-awesome_streamer"
   exit 1
 else
   echo "copying over the contents of the source folder: $1"
