@@ -14,21 +14,28 @@ origin_dir=$(pwd) # Save the starting directory
 cd obs-studio/
 
 os="darwin"
-platform="macos"
+preset="macos"
 buildFolder="build_macos/packed_build"
-if [ "$1" == "windows-x64" ] || [ "$1" == "windows-ci-x64" ]; then
-  platform=$1
+
+# Determine the operating system
+ostype=$(uname)
+
+if [ "$ostype" == "Darwin" ]; then
+  echo "Script $0 is running on macOS."
+elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
+  preset="windows-x64"
   buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
   os="windows"
 else
-  echo "platform: $platform"
+  echo "Unsupported operating system: $ostype"
+  exit 1
 fi
 
 rm -rf "$buildFolder"
-cmake --preset $platform -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE="$OBS_PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$OBS_CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$OBS_CODESIGN_IDENTITY"
+cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE="$OBS_PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$OBS_CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$OBS_CODESIGN_IDENTITY"
 
 if [ "$os" == "darwin" ]; then
   # Relaunch Xcode; this way all the targets will be refreshed properly
   echo "Attempting to re-open the xcode project"
-  open "$buildFolder/obs-studio.xcodeproj"
+  open "build_macos/obs-studio.xcodeproj"
 fi
