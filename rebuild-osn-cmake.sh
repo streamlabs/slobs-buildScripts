@@ -1,10 +1,26 @@
 #!/bin/bash
 cd ..
 origin_dir=$(pwd) # Save the starting directory
-
+cd obs-studio-node
 echo "This script assumes you already ran the build-osn-streambuild.sh script at least once!!!"
 
-cd obs-studio-node
+# Determine the operating system
+ostype=$(uname)
+
+if [ "$ostype" == "Darwin" ]; then
+  echo "Script is running on macOS."
+elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
+  echo "Script $0 is running on Windows.."
+  yarn install
+  cd build
+  cmake --build . --target install --config RelWithDebInfo
+
+  exit 1
+else
+  echo "Unsupported operating system: $ostype"
+  exit 1
+fi
+
 cd streamlabs-build.app
 # run this command from streamlabs-build.app folder
 cmake .. -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15 -DCMAKE_INSTALL_PREFIX=$origin_dir/obs-studio-node/streamlabs-build.app/../streamlabs-build.app/distribute/obs-studio-node -DSTREAMLABS_BUILD=OFF -DNODEJS_NAME=iojs -DNODEJS_URL=https://artifacts.electronjs.org/headers/dist -DNODEJS_VERSION=v29.4.3 -DLIBOBS_BUILD_TYPE=release -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_OSX_ARCHITECTURES=arm64 -G Xcode

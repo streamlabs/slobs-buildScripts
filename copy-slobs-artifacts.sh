@@ -7,10 +7,13 @@ ostype=$(uname)
 if [ "$ostype" == "Darwin" ]; then
   echo "Script $0 is running on macOS."
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
-  echo "$0 is copying slobs artifacts to desktop"
-  baseDir=$(pwd)
-  cp  -rv build_x64/rundir/RelWithDebInfo/bin/64bit/* ../desktop/node_modules/obs-studio-node/
-  cp  -rv build_x64/rundir/RelWithDebInfo/obs-plugins/64bit/* ../desktop/node_modules/obs-studio-node/
+  echo "$0 has nothing to do on Windows as long as build scripts for SLOBS/OSN are working."
+  # TODO: Windows build scripts for SLOBS/OSN should already be copying over the bins.
+  #cp  -rv build_x64/rundir/RelWithDebInfo/bin/64bit/* ../desktop/node_modules/obs-studio-node/
+  #cp  -rv build_x64/rundir/RelWithDebInfo/obs-plugins/64bit/* ../desktop/node_modules/obs-studio-node/
+
+  # copy the artifacts developer compiled from vstudio
+  #cp  -rv build_x64/plugins/obs-browser/RelWithDebInfo/* ../desktop/node_modules/obs-studio-node/
   exit 1
 else
   echo "Unsupported operating system: $ostype"

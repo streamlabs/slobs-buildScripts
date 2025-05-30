@@ -1,8 +1,22 @@
-echo "Copying files from OSN-streambuild-app to desktop/node_modules"
-
+buildScripts_dir=$(pwd)
 cd ..
 origin_dir=$(pwd) # Save the starting directory
 cd obs-studio-node
+
+# Determine the operating system
+ostype=$(uname)
+
+if [ "$ostype" == "Darwin" ]; then
+  echo "Copying files from OSN-streambuild-app to desktop/node_modules"
+elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
+  cd $buildScripts_dir
+  "./rebuild-osn-cmake.sh"
+  exit 1
+else
+  echo "Unsupported operating system: $ostype"
+  exit 1
+fi
+
 cmake --build streamlabs-build.app --target install --config RelWithDebInfo
 
 exit_status=$?

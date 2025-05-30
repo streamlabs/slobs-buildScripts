@@ -3,15 +3,24 @@ cd ../obs-studio/
 
 preset="macos"
 buildFolder="build_macos"
-if [ "$1" == "windows-x64" ] || [ "$1" == "windows-ci-x64" ]; then
-  preset=$1
-  buildFolder="build_x64"
-else
+
+# Determine the operating system
+ostype=$(uname)
+
+if [ "$ostype" == "Darwin" ]; then
   os="darwin"
   echo "preset: $preset"
   echo "Remove old artifacts to ensure they are properly replaced"
   rm -rf ./build_macos/packed_build/OBS.app
   rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
+elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
+  preset=$1
+  buildFolder="build_x64"
+  echo "No need to copy bins on $ostype. Building osn wil automatically copy the bins."
+  exit 0
+else
+  echo "Unsupported operating system: $ostype"
+  exit 1
 fi
 
 echo "Time to run xcodebuild"
