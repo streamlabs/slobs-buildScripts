@@ -3,6 +3,35 @@ cd ..
 origin_dir=$(pwd) # Save the starting directory
 
 cd obs-studio-node
+
+# Determine the operating system
+ostype=$(uname)
+
+if [ "$ostype" == "Darwin" ]; then
+  echo "Script is running on macOS."
+elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
+  echo "Script $0 is running on Windows.."
+  mkdir build
+  yarn install
+  cd build
+  cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="$origin_dir/obs-studio-node/build/libobs-src/" ../ -DCMAKE_INSTALL_PREFIX="$origin_dir/desktop/node_modules/obs-studio-node"
+  
+
+  exit_status=$?
+
+  if [ $exit_status -eq 0 ]; then
+    echo "Built obs-studio-node successfully."
+    cmake --build . --target install --config RelWithDebInfo
+  else
+    echo "failed building obs-studio-node with exit code $exit_status."
+  fi
+
+  exit 1
+else
+  echo "Unsupported operating system: $ostype"
+  exit 1
+fi
+
 rm -rf streamlabs-build.app
 mkdir -p streamlabs-build.app/distribute
 cd streamlabs-build.app/distribute

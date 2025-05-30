@@ -1,5 +1,19 @@
 cd ../obs-studio/
 
+# Determine the operating system
+ostype=$(uname)
+
+if [ "$ostype" == "Darwin" ]; then
+  echo "Script is running on macOS."
+elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
+  echo "Script $0 is running on Windows which is not supported yet."
+  # User should have built the bins into obs-studio-node/build/libobs-src already so copy into desktop.
+  exit 1
+else
+  echo "Unsupported operating system: $ostype"
+  exit 1
+fi
+
 # now copy into desktop
 echo "Now copying into streamlabs/desktop"
 rm -rf ./../desktop/node_modules/obs-studio-node/Frameworks

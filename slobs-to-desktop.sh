@@ -1,13 +1,25 @@
 origin_dir=$(pwd) # Save the starting directory
 cd ../obs-studio/
 
+preset="macos"
+buildFolder="build_macos"
+if [ "$1" == "windows-x64" ] || [ "$1" == "windows-ci-x64" ]; then
+  preset=$1
+  buildFolder="build_x64"
+  echo "Script $0 is running on Windows which is not supported. Windows build scripts should automatically populate desktop."
+  exit 1
+else
+  os="darwin"
+  echo "preset: $preset"
+fi
+
 echo "Remove old artifacts to ensure they are properly replaced"
 rm -rf ./build_macos/packed_build/OBS.app
 rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
 
 echo "Time to run xcodebuild"
 
-cmake --build --target install --preset macos -v
+cmake --build --target install --preset $preset -v
 
 exit_status=$?
 
