@@ -22,16 +22,17 @@ ostype=$(uname)
 
 if [ "$ostype" == "Darwin" ]; then
   echo "Script $0 is running on macOS."
+  rm -rf "build_macos"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset="windows-x64"
   buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
+  rm -rf "$buildFolder"
   os="windows"
 else
   echo "Unsupported operating system: $ostype"
   exit 1
 fi
 
-rm -rf "$buildFolder"
 cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE="$OBS_PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$OBS_CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$OBS_CODESIGN_IDENTITY"
 
 if [ "$os" == "darwin" ]; then
