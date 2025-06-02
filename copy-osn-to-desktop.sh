@@ -17,21 +17,23 @@ else
   exit 1
 fi
 
+# Remove previous artifacts. Force timestamps to get updated.
+rm -rf $origin_dir/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node
+rm -rf $origin_dir/obs-studio-node/streamlabs-build.app/obs-studio-server/RelWithDebInfo
+
+# Build RelWithDebInfo artifact and install into distribute folder.
 cmake --build streamlabs-build.app --target install --config RelWithDebInfo
 
 exit_status=$?
 
 if [ $exit_status -eq 0 ]; then
   echo "copying the files."
-    cd $origin_dir/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node
+  cd $origin_dir/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node
 
-    rm -rf $origin_dir/desktop/node_modules/obs-studio-node/bin
-    cp -R ./bin $origin_dir/desktop/node_modules/obs-studio-node
-    rm -rf $origin_dir/desktop/node_modules/obs-studio-node/Frameworks
-    rm -rf $origin_dir/desktop/node_modules/obs-studio-node/PlugIns
-    cp -R ./Frameworks $origin_dir/desktop/node_modules/obs-studio-node
-    cp -R ./PlugIns $origin_dir/desktop/node_modules/obs-studio-node
-    cp obs_studio_client.0.3.21.0.node $origin_dir/desktop/node_modules/obs-studio-node
+  rm -rf $origin_dir/desktop/node_modules/obs-studio-node/bin
+  # Copy obs-studio-server binary
+  cp -Rv ./bin $origin_dir/desktop/node_modules/obs-studio-node
+  cp obs_studio_client.0.3.21.0.node $origin_dir/desktop/node_modules/obs-studio-node
 else
   echo "building osn failed with exit code $exit_status."
 fi
