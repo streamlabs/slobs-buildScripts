@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# How to use: Pass in any argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast.
+if [ ! -d "../obs-studio-node" ]; then
+  echo "Error: 'obs-studio-node' directory is not found."
+  exit 1
+fi
+
 cd ..
 origin_dir=$(pwd) # Save the starting directory
 

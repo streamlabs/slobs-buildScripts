@@ -1,4 +1,8 @@
 #!/bin/bash
+origin_dir=$(pwd)
+"./remove-DSStore.sh"
+
+cd "$origin_dir"
 cd ../desktop
 
 # compile source file changes

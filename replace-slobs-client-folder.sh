@@ -19,4 +19,3 @@ rm -rf ~/Library/Application\ Support/slobs-client/SceneCollections
 cp -R $1/SceneCollections/ ~/Library/Application\ Support/slobs-client/SceneCollections
 open ~/Library/Application\ Support/slobs-client
 
-echo "TIP: Developer might also need to run the "update-everything-from-slobs.sh" script if you witness obs64 version mismatch error!"
