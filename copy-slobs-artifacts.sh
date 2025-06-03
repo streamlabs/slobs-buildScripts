@@ -23,8 +23,9 @@ fi
 # now copy into desktop
 echo "Now copying into streamlabs/desktop"
 rm -rf ../desktop/node_modules/obs-studio-node/Frameworks
-cp  -R ./build_macos/packed_build/OBS.app/Contents/Frameworks ../desktop/node_modules/obs-studio-node
-#cp  -R ./build_macos/packed_build/OBS.app/Contents/Library ../desktop/node_modules/obs-studio-node
+rm -rf ../desktop/node_modules/obs-studio-node/Plugins
+cp  -Rv ./build_macos/UI/RelWithDebInfo/OBS.app/Contents/Frameworks ../desktop/node_modules/obs-studio-node
+cp  -Rv ./build_macos/UI/RelWithDebInfo/OBS.app/Contents/Plugins ../desktop/node_modules/obs-studio-node
 
 # copy to OSN
 # Disabled removing the previous artifact. This will require Obs-studio-node xcodeproj to be rebuilt because it cant find obs.h
