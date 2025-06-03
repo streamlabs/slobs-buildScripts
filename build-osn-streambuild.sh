@@ -6,7 +6,10 @@ cd obs-studio-node || { echo "Error: Failed to navigate to obs-studio-node."; ex
 
 build_macos() {
 
-  rm -rf streamlabs-build.app
+  if [ $# -ne 0 ]; then
+    echo "Deleting cached build. Grab a coffee!"
+    rm -rf streamlabs-build.app
+  fi
   mkdir -p streamlabs-build.app/distribute
   cd streamlabs-build.app/distribute
   mkdir obs-studio-node
@@ -27,7 +30,7 @@ build_macos() {
 
 build_windows() {
   echo "Script $0 is running on Windows.."
-  mkdir build
+  mkdir -p build
   yarn install
   cd build
   cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="$origin_dir/obs-studio-node/build/libobs-src/" ../ -DCMAKE_INSTALL_PREFIX="$origin_dir/desktop/node_modules/obs-studio-node"
