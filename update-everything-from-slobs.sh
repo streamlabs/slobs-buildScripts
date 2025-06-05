@@ -1,7 +1,7 @@
 #!/bin/bash
 origin_dir=$(pwd) # Save the starting directory
 
-"./slobs-to-desktop.sh"
+"./install-slobs.sh"
 exit_status=$?
 
 if [ $exit_status -eq 0 ]; then

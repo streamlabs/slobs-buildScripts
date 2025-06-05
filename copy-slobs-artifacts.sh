@@ -20,6 +20,16 @@ else
   exit 1
 fi
 
+if [ ! -d "../obs-studio-node" ]; then
+  echo "Error: 'obs-studio-node' directory is not found. Build obs-studio-node first."
+  exit 1
+fi
+
+if [ ! -d "../desktop" ]; then
+  echo "Error: 'desktop' directory is not found. Build Streamlabs Desktop first"
+  exit 1
+fi
+
 # now copy into desktop
 echo "Now copying into streamlabs/desktop"
 rm -rf ../desktop/node_modules/obs-studio-node/Frameworks

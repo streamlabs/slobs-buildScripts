@@ -1,3 +1,6 @@
+#!/bin/bash
+
+# Build & run the install target for streamlabs-obs. Then Copy it into other projects
 origin_dir=$(pwd) # Save the starting directory
 cd ../obs-studio/
 
