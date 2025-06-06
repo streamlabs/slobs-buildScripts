@@ -10,20 +10,20 @@ Install this folder in the same directory right beside streamlabs-desktop, strea
 ```
 root folder (ex., streamlabs folder)
 -->slobs-buildScripts (this repo)
--->desktop
--->obs-studio (aka SLOBS)
--->obs-studio-node (aka OSN)
+-->streamlabs/desktop
+-->streamlabs/obs-studio (aka SLOBS)
+-->streamlabs/obs-studio-node (aka OSN)
 ```
 
 Download all of these repos first. Run `rebuild-slobs.sh` to build SLOBS. Next, run `build-osn-streambuild.sh` which will create a fake .app bundle for the automated tests. The advantage here it mimcs what the
 github workflow does. _Note_: Xcode currently defaults to Debug for OSN & SLOBS but the build scripts are configured for RelWithDebugInfo. Lastly, run `rebuild-desktop.sh`.
 
-When you make changes to code, just hit _⌘+Shift+B_ (or CTRL+SHIFT+B on Windows in Visual studio code) to copy over the updated artifacts. Sometimes drastic changes may require rebuild which means running `build-osn-streambuild.sh 1`. This will
-trigger a complete rebuild of obs-studio-node causing it to redownload all deps. Grab a coffee this might take a few mins.
+When you make changes to code, just hit _⌘+Shift+B_ (or CTRL+SHIFT+B on Windows) in Visual studio code to copy over the updated artifacts (behind the scenes this will run `update-everything-from-slobs.sh`). Sometimes drastic changes may require rebuild which means running `build-osn-streambuild.sh 1`. This will
+trigger a complete rebuild of obs-studio-node causing it to redownload all deps. Grab a coffee this might take a few mins. Note- the local libobs_src folder will be replaced by the downloaded artifact (set by LibOBSVersion). You'll likely want to run `install-slobs.sh` to overwrite this with your local changes.
 
 # Testing SLOBS changes in obs-studio-node
 
-Run `update-everything-from-SLOBS.sh` script (via the _⌘+Shift+B_ hotkey combination) to build `streamlabs/obs-studio` & `obs-studio-node`. The resulting artifacts will be copied into `streamlabs/desktop`. Now when you execute the `yarn run test` command in OSN directory, it will utilize the latest build automatically. In addition, _desktop_ will also be updated.
+Run `update-everything-from-SLOBS.sh` script (via the _⌘+Shift+B_ hotkey combination) to build `streamlabs/obs-studio` & `obs-studio-node`. The resulting artifacts will be copied into `streamlabs/desktop`. Now when you execute the `yarn run test` command in OSN directory, it will utilize the latest compiled artifact. In addition, _desktop_ will also be updated.
 
 # Environment variables
 
@@ -31,4 +31,4 @@ If you want to enable mac-virtual-cam on macOS 12.3+ you'll need to define the f
 
 # Future plan
 
-Eventually, some of these scripts will likely get copied over into their respective repos where appropriate after I feel like they're in a more polished state
+Eventually, some of these scripts will likely get copied over into their respective repos where appropriate. But they will take a slightly different form in those repos so they can be ran via `yarn`.

@@ -1,4 +1,3 @@
-buildScripts_dir=$(pwd)
 cd ..
 origin_dir=$(pwd) # Save the starting directory
 cd obs-studio-node
@@ -9,9 +8,9 @@ ostype=$(uname)
 if [ "$ostype" == "Darwin" ]; then
   echo "Copying files from OSN-streambuild-app to desktop/node_modules"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
-  cd $buildScripts_dir
-  "./rebuild-osn-cmake.sh"
-  exit 1
+  cmake --build . --target install --config RelWithDebInfo
+  ret=$?  # Capture the exit status of the build
+  exit "$ret"
 else
   echo "Unsupported operating system: $ostype"
   exit 1
@@ -36,3 +35,4 @@ if [ $exit_status -eq 0 ]; then
 else
   echo "building osn failed with exit code $exit_status."
 fi
+exit "$exit_status"
