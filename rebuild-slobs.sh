@@ -22,7 +22,7 @@ ostype=$(uname)
 
 if [ "$ostype" == "Darwin" ]; then
   echo "Script $0 is running on macOS."
-  rm -rf "build_macos"
+  rm -rf build_macos
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset="windows-x64"
   buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
@@ -33,7 +33,7 @@ else
   exit 1
 fi
 
-cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE="$OBS_PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$OBS_CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$OBS_CODESIGN_IDENTITY"
+cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT"
 
 if [ "$os" == "darwin" ]; then
   # Relaunch Xcode; this way all the targets will be refreshed properly

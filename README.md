@@ -15,11 +15,12 @@ root folder (ex., streamlabs folder)
 -->streamlabs/obs-studio-node (aka OSN)
 ```
 
-Download all of these repos first. Run `rebuild-slobs.sh` to build SLOBS. Next, run `build-osn-streambuild.sh` which will create a fake .app bundle for the automated tests. The advantage here it mimcs what the
+![folder structure](folder_layout.png)
+
+Download all of these repos from [github](https://github.com/streamlabs) first. Run `rebuild-slobs.sh` to build SLOBS. Next, run `build-osn-streambuild.sh` which will create a fake .app bundle for the automated tests. The advantage here it mimcs what the
 github workflow does. _Note_: Xcode currently defaults to Debug for OSN & SLOBS but the build scripts are configured for RelWithDebugInfo. Lastly, run `rebuild-desktop.sh`.
 
-When you make changes to code, just hit _⌘+Shift+B_ (or CTRL+SHIFT+B on Windows) in Visual studio code to copy over the updated artifacts (behind the scenes this will run `update-everything-from-slobs.sh`). Sometimes drastic changes may require rebuild which means running `build-osn-streambuild.sh 1`. This will
-trigger a complete rebuild of obs-studio-node causing it to redownload all deps. Grab a coffee this might take a few mins. Note- the local libobs_src folder will be replaced by the downloaded artifact (set by LibOBSVersion). You'll likely want to run `install-slobs.sh` to overwrite this with your local changes.
+When you make changes to code, just hit _⌘+Shift+B_ (or CTRL+SHIFT+B on Windows) in Visual Studio Code to copy over the updated artifacts (behind the scenes this will run `update-everything-from-slobs.sh`). Sometimes drastic changes may require rebuild which means running `build-osn-streambuild.sh 1`. This will trigger a complete rebuild of obs-studio-node causing it to redownload all deps. Grab a coffee this might take a few mins. Note- the local libobs_src folder will be replaced by the downloaded artifact (set by LibOBSVersion). You'll likely want to run `install-slobs.sh` to overwrite this with your local changes.
 
 # Testing SLOBS changes in obs-studio-node
 
