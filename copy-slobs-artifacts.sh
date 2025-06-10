@@ -36,7 +36,7 @@ fi
 echo "Now copying into streamlabs/desktop"
 rm -rf ../desktop/node_modules/obs-studio-node/Frameworks
 rm -rf ../desktop/node_modules/obs-studio-node/Plugins
-build_folder= "./build_macos/UI/RelWithDebInfo"
+build_folder="$(pwd)/build_macos/UI/RelWithDebInfo"
 cp  -Rv "$build_folder/OBS.app/Contents/Frameworks" ../desktop/node_modules/obs-studio-node
 cp  -Rv "$build_folder/OBS.app/Contents/Plugins" ../desktop/node_modules/obs-studio-node
 
@@ -46,8 +46,8 @@ cp  -Rv "$build_folder/OBS.app/Contents/Plugins" ../desktop/node_modules/obs-stu
 
 # make sure old artifacts are removed.
 rm -rf ./obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
-cp -R "$build_folder/Contents/Frameworks" ../obs-studio-node/streamlabs-build.app/libobs-src/
-cp -R "$build_folder" ../obs-studio-node/streamlabs-build.app/libobs-src
+cp -R "$build_folder/OBS.app/Contents/Frameworks" ../obs-studio-node/streamlabs-build.app/libobs-src/
+cp -R "$build_folder/OBS.app" ../obs-studio-node/streamlabs-build.app/libobs-src
 
 # Disabled removing the previous artifact. This will require Obs-studio-node xcodeproj to be rebuilt because it cant find obs.h
 #rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/include
