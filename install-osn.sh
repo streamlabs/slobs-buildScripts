@@ -1,3 +1,5 @@
+HOME_DIR=$(dirname "$(realpath "$0")")
+cd $HOME_DIR
 cd ..
 origin_dir=$(pwd) # Save the starting directory
 cd obs-studio-node

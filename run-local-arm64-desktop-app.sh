@@ -1,6 +1,7 @@
 #!/bin/bash
 # Run Streamlabs Desktop w/o triggering the updater and open the logs folder (although stdout and stderr will appear in Terminal)
-
+HOME_DIR=$(dirname "$(realpath "$0")")
+cd "$HOME_DIR" # make sure we start in the home folder
 # Reload bash profile etc incase dev changed env variable
 source ~/.zshrc
 

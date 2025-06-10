@@ -9,6 +9,8 @@ if [ ! -d "../obs-studio-node" ]; then
   exit 1
 fi
 
+HOME_DIR=$(dirname "$(realpath "$0")")
+cd "$HOME_DIR" # start in base folder
 cd ..
 origin_dir=$(pwd) # Save the starting directory
 cd obs-studio/
