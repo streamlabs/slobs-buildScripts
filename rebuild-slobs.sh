@@ -37,7 +37,7 @@ fi
 
 cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT"
 
-if [ "$os" == "darwin" ]; then
+if [[ "$os" == "darwin" && "$1" == "open" ]]; then
   # Relaunch Xcode; this way all the targets will be refreshed properly
   echo "Attempting to re-open the xcode project"
   open "build_macos/obs-studio.xcodeproj"
