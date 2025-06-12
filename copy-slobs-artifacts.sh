@@ -36,7 +36,7 @@ fi
 echo "Now copying into streamlabs/desktop"
 rm -rf ../desktop/node_modules/obs-studio-node/Frameworks
 rm -rf ../desktop/node_modules/obs-studio-node/Plugins
-build_folder="$(pwd)/build_macos/UI/RelWithDebInfo"
+build_folder="$(pwd)/build_macos/packed_build" # use packed_build - this OBS.app has ffmpeg/ffprobe
 cp  -Rv "$build_folder/OBS.app/Contents/Frameworks" ../desktop/node_modules/obs-studio-node
 cp  -Rv "$build_folder/OBS.app/Contents/Plugins" ../desktop/node_modules/obs-studio-node
 

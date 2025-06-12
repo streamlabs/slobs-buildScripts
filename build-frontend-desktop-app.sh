@@ -29,7 +29,6 @@ fi
 
 rm -rf dist # remove previous artifacts
 
-echo "If codesign is enabled, you need to change identity."
 ARCH=$(uname -m)
 
 if [[ "$ARCH" == "arm64" ]]; then
