@@ -18,6 +18,11 @@ else
   exit 1
 fi
 
+if [ ! -d "./streamlabs-build.app" ]; then
+  echo "Error: 'streamlabs-build.app' directory is not found. Build obs-studio-node first."
+  exit 1
+fi
+
 # Remove previous artifacts. Force timestamps to get updated.
 rm -rf "$origin_dir/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node"
 rm -rf "$origin_dir/obs-studio-node/streamlabs-build.app/obs-studio-server/RelWithDebInfo"
