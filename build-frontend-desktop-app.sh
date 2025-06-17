@@ -17,15 +17,15 @@ origin_dir=$(dirname "$(realpath "$0")")
 cd "$origin_dir"
 "./remove-DSStore.sh" # remove hidden files that will break codesign
 
+if [ $# -ge 1 ]; then
+    codesign_app $1
+fi
+
 cd "$origin_dir"
 cd ../desktop
 
 # compile source file changes
 yarn compile
-
-if [ $# -ge 1 ]; then
-    codesign_app $1
-fi
 
 rm -rf dist # remove previous artifacts
 
