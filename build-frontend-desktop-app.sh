@@ -1,5 +1,5 @@
 #!/bin/bash
-# Usage: Pass true or false directly into SLOBS_NO_SIGN. Pass "disable" to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment). If no arguments are specified, then no environment variables will be altered.
+# Usage: Pass "unset" to remove SLOBS_NO_SIGN environment var so you can run codesign. Pass "disable" to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment). If no arguments are specified, then no environment variables will be altered.
 # Example: ./build-frontend-desktop-app.sh disable
 codesign_app() {
     # The settings below should come from the bash profile ideally.
@@ -7,9 +7,11 @@ codesign_app() {
         export SLOBS_NO_SIGN="true"
         export APPLE_SLD_IDENTITY="false"
         echo "Set SLOBS_NO_SIGN=true and APPLE_SLD_IDENTITY=false to disable codesign"
+    elif [[ "$1" == "unset" ]]; then
+        unset SLOBS_NO_SIGN
+        echo "unset SLOBS_NO_SIGN env var"
     else
-        export SLOBS_NO_SIGN=$1
-        echo "Set SLOBS_NO_SIGN=$1"
+        echo "Unrecognized argument: $1"
     fi
 }
 
