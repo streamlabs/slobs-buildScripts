@@ -30,6 +30,11 @@ Run `update-everything-from-SLOBS.sh` script (via the _⌘+Shift+B_ hotkey combi
 
 If you want to enable mac-virtual-cam on macOS 12.3+ you'll need to define the following environment variable `OBS_CODESIGN_TEAM` to enable automatic codesign in xcode.
 
+# Build Desktop.app
+
+If you just want to build the Streamlabs desktop.app then just run the following scripts:
+`rebuild-desktop.sh` and `build-frontend-desktop-app.sh` scripts. Note: if the script fails to build the app you might need to run this command `yarn add electron-builder@23.6.0`. After the desktop app has been built into your dist folder, run the `run-local-arm64-desktop-app.sh` script.
+
 # Future plan
 
 Eventually, some of these scripts will likely get copied over into their respective repos where appropriate. But they will take a slightly different form in those repos so they can be ran via `yarn`.
