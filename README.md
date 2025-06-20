@@ -33,7 +33,7 @@ If you want to enable mac-virtual-cam on macOS 12.3+ you'll need to define the f
 # Build Desktop.app
 
 If you just want to build the Streamlabs desktop.app then just run the following scripts:
-`rebuild-desktop.sh` and `build-frontend-desktop-app.sh` scripts. Note: if the script fails to build the app you might need to run this command `yarn add electron-builder@23.6.0`. After the desktop app has been built into your dist folder, run the `run-local-arm64-desktop-app.sh` script.
+`rebuild-desktop.sh` and `build-frontend-desktop-app.sh` scripts. Note: if the script fails to build the app you might need to run this command `yarn add electron-builder@23.6.0`. After the desktop app has been built into your dist folder, run the `run-local-arm64-desktop-app.sh` script. This script will prevent the updater from starting and attempt to download the preview.
 
 # Future plan
 
