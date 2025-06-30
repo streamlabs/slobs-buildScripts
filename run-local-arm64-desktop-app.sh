@@ -1,5 +1,8 @@
 #!/bin/bash
-# Run Streamlabs Desktop w/o triggering the updater and open the logs folder (although stdout and stderr will appear in Terminal).
+# Macos only script. Run Streamlabs Desktop w/o triggering the updater and open the logs folder (although stdout and stderr will appear in Terminal).
+# All additional arguments are passed directly to Desktop app. For ex, pass --nosync command like argument to prevent sceneCollection sync.
+# Example: 
+# ./run-local-arm64-desktop-app.sh --nosync
 HOME_DIR=$(dirname "$(realpath "$0")")
 cd "$HOME_DIR" # make sure we start in the home folder
 # Reload bash profile etc incase dev changed env variable
@@ -17,5 +20,5 @@ fi
 open ~/Library/Application\ Support/slobs-client/node-obs/logs/
 
 # Run the app directly so we can capture stdout and skip auto-updater
-./Streamlabs\ Desktop.app/Contents/MacOS/Streamlabs\ Desktop --skip-update
+./Streamlabs\ Desktop.app/Contents/MacOS/Streamlabs\ Desktop --skip-update "$1"
 
