@@ -26,7 +26,7 @@ fi
 cd "$origin_dir"
 cd ../desktop
 
-# compile source file changes
+echo "compile source file changes"
 yarn compile
 yarn add electron-builder@23.6.0 # Hack: Get around the "NameError: name 'reload' is not defined" error
 
