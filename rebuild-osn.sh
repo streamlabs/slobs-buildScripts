@@ -15,7 +15,7 @@ cd obs-studio-node || { echo "Error: Failed to navigate to obs-studio-node."; ex
 
 build_macos() {
 
-  if [ "$1" == "true" ]; then
+  if [ "$1" == "full" ]; then
     echo "Deleting cached build. Grab a coffee!"
     rm -rf streamlabs-build.app
   fi
@@ -40,6 +40,11 @@ build_macos() {
 
 build_windows() {
   echo "Script $0 is running on Windows.."
+  if [ "$1" == "full" ]; then
+    echo "Deleting cached build. Grab a coffee!"
+    rm -rf build
+  fi
+
   mkdir -p build
   yarn install
   cd build
@@ -64,14 +69,9 @@ code=0
 
 if [ "$ostype" == "Darwin" ]; then
   echo "Script is building obs-studio-node within streamlabs-build.app."
-  if [ $# -ge 1 ]; then
-      hasArguments="true"
-  else
-      hasArguments="false"
-  fi
-  build_macos "$hasArguments"
+  build_macos "$1"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
-  build_windows
+  build_windows "$1"
 else
   echo "Unsupported operating system: $ostype"
   exit 1
