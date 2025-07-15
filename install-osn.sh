@@ -10,7 +10,7 @@ ostype=$(uname)
 if [ "$ostype" == "Darwin" ]; then
   echo "Copying files from OSN-streambuild-app to desktop/node_modules"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
-  cmake --build . --target install --config RelWithDebInfo
+  cmake --build build --target install --config RelWithDebInfo
   ret=$?  # Capture the exit status of the build
   exit "$ret"
 else
