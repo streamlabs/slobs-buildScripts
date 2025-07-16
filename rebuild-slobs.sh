@@ -28,7 +28,7 @@ if [ "$ostype" == "Darwin" ]; then
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset="windows-x64"
   buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
-  rm -rf "$buildFolder"
+  rm -rf build_x64
   os="windows"
 else
   echo "Unsupported operating system: $ostype"
