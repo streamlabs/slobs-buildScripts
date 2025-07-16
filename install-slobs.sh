@@ -17,19 +17,16 @@ if [ "$ostype" == "Darwin" ]; then
   echo "Remove old artifacts to ensure they are properly replaced"
   rm -rf ./build_macos/packed_build/OBS.app
   rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
+  echo "Time to run xcodebuild"
+  cmake --build --target install --preset $preset -v
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset=$1
   buildFolder="build_x64"
-  echo "No need to copy bins on $ostype. Building osn wil automatically copy the bins."
-  exit 0
+  cmake --build build_x64 --target install -v --config RelWithDebInfo
 else
   echo "Unsupported operating system: $ostype"
   exit 1
 fi
-
-echo "Time to run xcodebuild"
-
-cmake --build --target install --preset $preset -v
 
 exit_status=$?
 
