@@ -16,13 +16,15 @@ cd obs-studio-node || { echo "Error: Failed to navigate to obs-studio-node."; ex
 build_macos() {
 
   if [ "$1" == "full" ]; then
-    echo "Deleting cached build. Grab a coffee!"
+    echo "$0 Deleting cached build. Grab a coffee!"
     rm -rf streamlabs-build.app
   fi
+  echo "$0 Create streamlabs-build.app/distribute folder"
   mkdir -p streamlabs-build.app/distribute
   cd streamlabs-build.app/distribute
   mkdir obs-studio-node
   cd ..
+  yarn install
   # Note: This will download a new libobs_src folder (which contains the packed OBS.app built by SLOBS on github)
   cmake .. -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15 -DCMAKE_INSTALL_PREFIX=$origin_dir/obs-studio-node/streamlabs-build.app/../streamlabs-build.app/distribute/obs-studio-node -DSTREAMLABS_BUILD=OFF -DNODEJS_NAME=iojs -DNODEJS_URL=https://artifacts.electronjs.org/headers/dist -DNODEJS_VERSION=v29.4.3 -DLIBOBS_BUILD_TYPE=release -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_OSX_ARCHITECTURES=arm64 -G Xcode
 
