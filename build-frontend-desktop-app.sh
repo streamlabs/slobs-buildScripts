@@ -6,12 +6,12 @@ codesign_app() {
     if [[ "$1" == "disable" ]]; then
         export SLOBS_NO_SIGN="true"
         export APPLE_SLD_IDENTITY="false"
-        echo "Set SLOBS_NO_SIGN=true and APPLE_SLD_IDENTITY=false to disable codesign"
+        echo "$0 Set SLOBS_NO_SIGN=true and APPLE_SLD_IDENTITY=false to disable codesign"
     elif [[ "$1" == "unset" ]]; then
         unset SLOBS_NO_SIGN
-        echo "unset SLOBS_NO_SIGN env var"
+        echo "$0 unset SLOBS_NO_SIGN env var"
     else
-        echo "Unrecognized argument: $1"
+        echo "$0 Unrecognized argument: $1"
     fi
 }
 
@@ -26,9 +26,10 @@ fi
 cd "$origin_dir"
 cd ../desktop
 
-echo "compile source file changes"
-yarn compile
-yarn add electron-builder@23.6.0 # Hack: Get around the "NameError: name 'reload' is not defined" error
+# set PYTHON_PATH to get around this issue: https://github.com/electron-userland/electron-builder/issues/6726
+echo "$0 searching for python2 to resolve electron-builder issue: https://github.com/electron-userland/electron-builder/issues/6726"
+output=$(which python2)
+export PYTHON_PATH=$output
 
 rm -rf dist # remove previous artifacts
 
@@ -39,5 +40,5 @@ if [[ "$ARCH" == "arm64" ]]; then
 elif [[ "$ARCH" == "x86_64" ]]; then
     yarn package:mac
 else
-    echo "Unknown architecture: $ARCH"
+    echo "$0 Unknown architecture: $ARCH"
 fi
