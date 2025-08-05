@@ -1,18 +1,22 @@
 #!/bin/bash
 # Usage:
-# ./build-frontend-desktop-app.sh [--disable or --unset or nothing] --compile
+# ./build-frontend-desktop-app.sh [--disable | --unset-codesign | --unseet-all | <leave blank>] --compile
 # Pass "--unset" to remove SLOBS_NO_SIGN environment var so you can run codesign. Pass "--disable" to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment). If no arguments are specified, then no environment variables will be altered.
 # Optional argument (run yarn compile): --compile 
-# Example: ./build-frontend-desktop-app.sh --unset --compile
+# Example: ./build-frontend-desktop-app.sh --unset-all --compile
 codesign_app() {
     # The settings below should come from the bash profile ideally.
     if [[ "$1" == "--disable" ]]; then
         export SLOBS_NO_SIGN="true"
         export APPLE_SLD_IDENTITY="false"
         echo "$0 Set SLOBS_NO_SIGN=true and APPLE_SLD_IDENTITY=false to disable codesign"
-    elif [[ "$1" == "--unset" ]]; then
+    elif [[ "$1" == "--unset-codesign" ]]; then
         unset SLOBS_NO_SIGN
         echo "$0 unset SLOBS_NO_SIGN env var"
+    elif [[ "$1" == "--unset-all" ]]; then
+        unset SLOBS_NO_NOTARIZE
+        unset SLOBS_NO_SIGN
+        echo "$0 unset SLOBS_NO_SIGN & SLOBS_NO_NOTARIZE env vars"
     else
         echo "$0 Unrecognized argument: $1"
     fi
