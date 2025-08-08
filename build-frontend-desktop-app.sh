@@ -1,9 +1,12 @@
 #!/bin/bash
 # Usage:
-# ./build-frontend-desktop-app.sh [--disable | --unset-codesign | --unseet-all | <leave blank>] --compile
-# Pass "--unset" to remove SLOBS_NO_SIGN environment var so you can run codesign. Pass "--disable" to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment). If no arguments are specified, then no environment variables will be altered.
+# ./build-frontend-desktop-app.sh [--disable | --unset-codesign | --unset-all | <leave blank>] --compile | --reload-zshrc
+# Positional argument: "--unset" to remove SLOBS_NO_SIGN environment var so you can run codesign OR "--disable" to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment) OR If no arguments are specified, then no environment variables will be altered.
+# --reload-zshrc: reload env vars from .zshrc
 # Optional argument (run yarn compile): --compile 
 # Example: ./build-frontend-desktop-app.sh --unset-all --compile
+
+# function setups codesign/notarize
 codesign_app() {
     # The settings below should come from the bash profile ideally.
     if [[ "$1" == "--disable" ]]; then
@@ -26,6 +29,14 @@ origin_dir=$(dirname "$(realpath "$0")")
 cd "$origin_dir"
 "./remove-DSStore.sh" # remove hidden files that will break codesign
 
+# Search args for reload zsh option
+for arg in "$@"; do
+  if [ "$arg" == "--reload-zshrc" ]; then
+    echo "$0 run source ~/.zshrc"
+    source ~/.zshrc
+  fi
+done
+
 if [ $# -ge 1 ]; then
     codesign_app $1
 fi
@@ -33,9 +44,10 @@ fi
 cd "$origin_dir"
 cd ../desktop
 
+# Search args for 'yarn compile' option
 for arg in "$@"; do
   if [ "$arg" == "--compile" ]; then
-    echo "run yarn compile"
+    echo "$0 run yarn compile"
     yarn compile
   fi
 done
