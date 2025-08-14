@@ -3,6 +3,7 @@
 # Usage: rebuild-osn <clean>
 # Arguments-
 # clean: pass in this argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before.
+# arch - sets CMAKE_OSX_ARCHITECTURES
 # Warning: OSN cmake process will re-download LibOBS so if you built slobs locally you'll need to reinstall your changes into OSN again.
 if [ ! -d "../obs-studio-node" ]; then
   echo "Error: 'obs-studio-node' directory is not found."
@@ -15,11 +16,24 @@ origin_dir=$(pwd) # Save the starting directory
 cd obs-studio-node || { echo "Error: Failed to navigate to obs-studio-node."; exit 1; }
 
 build_macos() {
+  # Search args for 'yarn compile' option
+  for arg in "$@"; do
+    if [ "$arg" == "--clean" ]; then
+      echo "$0 Deleting cached build. Grab a coffee!"
+      rm -rf streamlabs-build.app
+    fi
+  done
 
-  if [ "$1" == "clean" ]; then
-    echo "$0 Deleting cached build. Grab a coffee!"
-    rm -rf streamlabs-build.app
-  fi
+  cmake_args=()
+  for arg in "$@"
+  do
+    # Check if the argument starts with --arch=
+    if [[ $arg == --arch=* ]]; then
+      # Extract the value using parameter expansion
+      arch_value="${arg#*=}"
+      cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${arch_value})
+    fi
+  done
   echo "$0 Create streamlabs-build.app/distribute folder"
   mkdir -p streamlabs-build.app/distribute
   cd streamlabs-build.app/distribute
@@ -27,7 +41,7 @@ build_macos() {
   cd ..
   yarn install
   # Note: This will download a new libobs_src folder (which contains the packed OBS.app built by SLOBS on github)
-  cmake .. -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15 -DCMAKE_INSTALL_PREFIX=$origin_dir/obs-studio-node/streamlabs-build.app/../streamlabs-build.app/distribute/obs-studio-node -DSTREAMLABS_BUILD=OFF -DNODEJS_NAME=iojs -DNODEJS_URL=https://artifacts.electronjs.org/headers/dist -DNODEJS_VERSION=v29.4.3 -DLIBOBS_BUILD_TYPE=release -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_OSX_ARCHITECTURES=arm64 -G Xcode
+  cmake .. -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15 -DCMAKE_INSTALL_PREFIX=$origin_dir/obs-studio-node/streamlabs-build.app/../streamlabs-build.app/distribute/obs-studio-node -DSTREAMLABS_BUILD=OFF -DNODEJS_NAME=iojs -DNODEJS_URL=https://artifacts.electronjs.org/headers/dist -DNODEJS_VERSION=v29.4.3 -DLIBOBS_BUILD_TYPE=release -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_OSX_ARCHITECTURES=arm64 "${cmake_args[@]}" -G Xcode
 
   exit_status=$?
 
@@ -72,9 +86,9 @@ code=0
 
 if [ "$ostype" == "Darwin" ]; then
   echo "Script is building obs-studio-node within streamlabs-build.app."
-  build_macos "$1"
+  build_macos "$@"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
-  build_windows "$1"
+  build_windows "$@"
 else
   echo "Unsupported operating system: $ostype"
   exit 1
