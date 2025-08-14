@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Usage: rebuild-osn <full>
-# Pass in any argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before.
+# Usage: rebuild-osn <clean>
+# Arguments-
+# clean: pass in this argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before.
 # Warning: OSN cmake process will re-download LibOBS so if you built slobs locally you'll need to reinstall your changes into OSN again.
 if [ ! -d "../obs-studio-node" ]; then
   echo "Error: 'obs-studio-node' directory is not found."
@@ -15,7 +16,7 @@ cd obs-studio-node || { echo "Error: Failed to navigate to obs-studio-node."; ex
 
 build_macos() {
 
-  if [ "$1" == "full" ]; then
+  if [ "$1" == "clean" ]; then
     echo "$0 Deleting cached build. Grab a coffee!"
     rm -rf streamlabs-build.app
   fi
