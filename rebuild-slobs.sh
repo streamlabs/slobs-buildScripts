@@ -1,4 +1,10 @@
 #!/bin/bash
+# Usage
+# ./rebuild-slobs.sh [--open | --arch]
+# open - opens the project in xcode
+# arch - sets the CMAKE_OSX_ARCHITECTURES
+# Example:
+# ./rebuild-slobs.sh --arch=x86_64
 if [ ! -d "../obs-studio" ]; then
   echo "Error: 'obs-studio' directory is not found."
   exit 1
@@ -19,6 +25,8 @@ os="darwin"
 preset="macos"
 buildFolder="build_macos/packed_build"
 openXcode=""
+arch_value=""
+cmake_args=()
 
 # Determine the operating system
 ostype=$(uname)
@@ -32,6 +40,16 @@ if [ "$ostype" == "Darwin" ]; then
       openXcode="open"
     fi
   done
+
+  for arg in "$@"
+  do
+    # Check if the argument starts with --arch=
+    if [[ $arg == --arch=* ]]; then
+      # Extract the value using parameter expansion
+      arch_value="${arg#*=}"
+      cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${arch_value})
+    fi
+  done
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset="windows-x64"
   buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
@@ -42,7 +60,8 @@ else
   exit 1
 fi
 
-cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT"
+echo "run cmake with additional args $cmake_args"
+cmake --preset "$preset" -DCMAKE_INSTALL_PREFIX="$buildFolder" -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT" "${cmake_args[@]}"
 
 if [[ "$os" == "darwin" && "$openXcode" == "open" ]]; then
   # Relaunch Xcode; this way all the targets will be refreshed properly
