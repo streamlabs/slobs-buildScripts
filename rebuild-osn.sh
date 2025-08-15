@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Usage: rebuild-osn <clean>
+# Usage: rebuild-osn [--clean --arch=ARCH]
 # Arguments-
 # clean: pass in this argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before.
-# arch - sets CMAKE_OSX_ARCHITECTURES
+# arch - sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64
 # Warning: OSN cmake process will re-download LibOBS so if you built slobs locally you'll need to reinstall your changes into OSN again.
 if [ ! -d "../obs-studio-node" ]; then
   echo "Error: 'obs-studio-node' directory is not found."

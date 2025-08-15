@@ -1,8 +1,8 @@
 #!/bin/bash
 # Usage
-# ./rebuild-slobs.sh [--open | --arch]
+# ./rebuild-slobs.sh [--open  --arch=ARCH]
 # open - opens the project in xcode
-# arch - sets the CMAKE_OSX_ARCHITECTURES
+# arch - sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64
 # Example:
 # ./rebuild-slobs.sh --arch=x86_64
 if [ ! -d "../obs-studio" ]; then
