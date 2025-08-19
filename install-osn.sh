@@ -39,7 +39,10 @@ if [ $exit_status -eq 0 ]; then
   # Copy obs-studio-server binary
   cp -Rv "$distribution_dir/bin" "$origin_dir/desktop/node_modules/obs-studio-node"
   cp -v "$distribution_dir/obs_studio_client.0.3.21.0.node" "$origin_dir/desktop/node_modules/obs-studio-node"
-  find . -type f -name "crash*" -exec cp {} "$origin_dir/desktop/node_modules/obs-studio-node" \;
+  cp -v "$distribution_dir/package.json" "$origin_dir/desktop/node_modules/obs-studio-node"
+  cp -v "$distribution_dir/crashpad_database_util" "$origin_dir/desktop/node_modules/obs-studio-node"
+  cp -v "$distribution_dir/crashpad_handler" "$origin_dir/desktop/node_modules/obs-studio-node"
+  cp -v "$distribution_dir/crashpad_http_upload" "$origin_dir/desktop/node_modules/obs-studio-node"
 else
   echo "building osn failed with exit code $exit_status."
 fi
