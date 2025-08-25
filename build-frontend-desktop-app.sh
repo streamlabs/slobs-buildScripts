@@ -1,28 +1,31 @@
 #!/bin/bash
 # Usage:
-# ./build-frontend-desktop-app.sh [--disable | --unset-codesign | --unset-all | <leave blank>] --compile | --reload-zshrc
-# Positional argument: "--unset" to remove SLOBS_NO_SIGN environment var so you can run codesign OR "--disable" to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment) OR If no arguments are specified, then no environment variables will be altered.
+# ./build-frontend-desktop-app.sh [--disable | --unset-codesign | --unset-all | --compile | --reload-zshrc]
+# Arguments:
+# --unset-codesign to remove SLOBS_NO_SIGN environment var so you can run codesign
+# --unset-all to remove both SLOBS_NO_NOTARIZE & SLOBS_NO_SIGN environment variables
+# --disable to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment)
 # --reload-zshrc: reload env vars from .zshrc
-# Optional argument (run yarn compile): --compile 
+# --compile: runs yarn compile in the desktop folder
 # Example: ./build-frontend-desktop-app.sh --unset-all --compile
 
 # function setups codesign/notarize
 codesign_app() {
-    # The settings below should come from the bash profile ideally.
-    if [[ "$1" == "--disable" ]]; then
-        export SLOBS_NO_SIGN="true"
-        export APPLE_SLD_IDENTITY="false"
-        echo "$0 Set SLOBS_NO_SIGN=true and APPLE_SLD_IDENTITY=false to disable codesign"
-    elif [[ "$1" == "--unset-codesign" ]]; then
-        unset SLOBS_NO_SIGN
-        echo "$0 unset SLOBS_NO_SIGN env var"
-    elif [[ "$1" == "--unset-all" ]]; then
-        unset SLOBS_NO_NOTARIZE
-        unset SLOBS_NO_SIGN
-        echo "$0 unset SLOBS_NO_SIGN & SLOBS_NO_NOTARIZE env vars"
-    else
-        echo "$0 Unrecognized argument: $1"
-    fi
+    for arg in "$@"; do
+        # The settings below should come from the bash profile ideally.
+        if [[ "$arg" == "--disable" ]]; then
+            export SLOBS_NO_SIGN="true"
+            export APPLE_SLD_IDENTITY="false"
+            echo "$0 Set SLOBS_NO_SIGN=true and APPLE_SLD_IDENTITY=false to disable codesign"
+        elif [[ "$arg" == "--unset-codesign" ]]; then
+            unset SLOBS_NO_SIGN
+            echo "$0 unset SLOBS_NO_SIGN env var"
+        elif [[ "$arg" == "--unset-all" ]]; then
+            unset SLOBS_NO_NOTARIZE
+            unset SLOBS_NO_SIGN
+            echo "$0 unset SLOBS_NO_SIGN & SLOBS_NO_NOTARIZE env vars"
+        fi
+    done
 }
 
 origin_dir=$(dirname "$(realpath "$0")")
@@ -38,7 +41,7 @@ for arg in "$@"; do
 done
 
 if [ $# -ge 1 ]; then
-    codesign_app $1
+    codesign_app "$@"
 fi
 
 cd "$origin_dir"
