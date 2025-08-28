@@ -12,7 +12,7 @@
 function display_usage {
   echo "Usage: $(basename "$0") [OPTIONS]"
   echo ""
-  echo "Description: This script processes files within a source directory."
+  echo "Description: This script builds the Streamlabs Desktop.app."
   echo ""
   echo "Options:"
   echo "  -h, --help        Display this help message and exit."
@@ -32,8 +32,6 @@ function display_usage {
   echo "  1 if Streamlabs desktop folder cannot be found."
   exit 0
 }
-
-# ... (script logic) ...
 
 if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
   display_usage

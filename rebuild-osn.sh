@@ -5,6 +5,30 @@
 # clean: pass in this argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before.
 # arch - sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64
 # Warning: OSN cmake process will re-download LibOBS so if you built slobs locally you'll need to reinstall your changes into OSN again.
+function display_usage {
+  echo "Usage: $(basename "$0") [OPTIONS]"
+  echo ""
+  echo "Description: This script builds obs-studio-node."
+  echo ""
+  echo "Options:"
+  echo "  -h, --help        Display this help message and exit."
+  echo "  --clean, -c       pass in this argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before."
+  echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64"
+  echo ""
+  echo "Examples:"
+  echo "  $(basename "$0") --clean --arch"
+  echo ""
+  echo "Exit Status:"
+  echo "  0 on successful execution."
+  echo "  1 if obs-studio-node folder cannot be found or build failure."
+  exit 0
+}
+
+if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
+  display_usage
+  exit 0
+fi
+
 if [ ! -d "../obs-studio-node" ]; then
   echo "Error: 'obs-studio-node' directory is not found."
   exit 1
@@ -16,14 +40,6 @@ origin_dir=$(pwd) # Save the starting directory
 cd obs-studio-node || { echo "Error: Failed to navigate to obs-studio-node."; exit 1; }
 
 build_macos() {
-  # Search args for 'yarn compile' option
-  for arg in "$@"; do
-    if [ "$arg" == "--clean" ]; then
-      echo "$0 Deleting cached build. Grab a coffee!"
-      rm -rf streamlabs-build.app
-    fi
-  done
-
   cmake_args=()
   for arg in "$@"
   do
@@ -32,6 +48,9 @@ build_macos() {
       # Extract the value using parameter expansion
       arch_value="${arg#*=}"
       cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${arch_value})
+    elif [[ "$arg" == "--clean" || "$arg" == "-c" ]]; then
+      echo "$0 Deleting cached build. Grab a coffee!"
+      rm -rf streamlabs-build.app
     fi
   done
   echo "$0 Create streamlabs-build.app/distribute folder"
