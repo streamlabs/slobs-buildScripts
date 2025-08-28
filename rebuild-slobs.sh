@@ -5,13 +5,31 @@
 # arch - sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64
 # Example:
 # ./rebuild-slobs.sh --arch=x86_64
-if [ ! -d "../obs-studio" ]; then
-  echo "Error: 'obs-studio' directory is not found."
-  exit 1
+function display_usage {
+  echo "Usage: $(basename "$0") [OPTIONS]"
+  echo ""
+  echo "Description: This script builds obs-studio-node."
+  echo ""
+  echo "Options:"
+  echo "  -h, --help        Display this help message and exit."
+  echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64"
+  echo ""
+  echo "Examples:"
+  echo "  $(basename "$0") --arch=x86_64"
+  echo ""
+  echo "Exit Status:"
+  echo "  0 on successful execution."
+  echo "  1 if obs-studio folder cannot be found or build failure."
+  exit 0
+}
+
+if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
+  display_usage
+  exit 0
 fi
 
-if [ ! -d "../obs-studio-node" ]; then
-  echo "Error: 'obs-studio-node' directory is not found."
+if [ ! -d "../obs-studio" ]; then
+  echo "Error: 'obs-studio' directory is not found."
   exit 1
 fi
 
@@ -34,12 +52,6 @@ ostype=$(uname)
 if [ "$ostype" == "Darwin" ]; then
   echo "$0 is running on macOS."
   rm -rf build_macos
-  # Search args for 'yarn compile' option
-  for arg in "$@"; do
-    if [ "$arg" == "--open" ]; then
-      openXcode="open"
-    fi
-  done
 
   for arg in "$@"
   do
@@ -48,6 +60,8 @@ if [ "$ostype" == "Darwin" ]; then
       # Extract the value using parameter expansion
       arch_value="${arg#*=}"
       cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${arch_value})
+    elif [[ ("$arg" == "--open") || ("$arg" == "-o") ]]; then
+      openXcode="open"
     fi
   done
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
@@ -60,7 +74,6 @@ else
   exit 1
 fi
 
-echo "run cmake with additional args $cmake_args"
 cmake --preset "$preset" -DCMAKE_INSTALL_PREFIX="$buildFolder" -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT" "${cmake_args[@]}"
 
 if [[ "$os" == "darwin" && "$openXcode" == "open" ]]; then

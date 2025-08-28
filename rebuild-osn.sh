@@ -16,7 +16,7 @@ function display_usage {
   echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64"
   echo ""
   echo "Examples:"
-  echo "  $(basename "$0") --clean --arch"
+  echo "  $(basename "$0") --clean --arch=x86_64"
   echo ""
   echo "Exit Status:"
   echo "  0 on successful execution."
