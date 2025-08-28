@@ -9,6 +9,44 @@
 # --compile: runs yarn compile in the desktop folder
 # Example: ./build-frontend-desktop-app.sh --unset-all --compile
 
+function display_usage {
+  echo "Usage: $(basename "$0") [OPTIONS]"
+  echo ""
+  echo "Description: This script processes files within a source directory."
+  echo ""
+  echo "Options:"
+  echo "  -h, --help        Display this help message and exit."
+  echo "  --unset-codesign  remove SLOBS_NO_SIGN environment var so you can run codesign"
+  echo "  --unset-all       remove both SLOBS_NO_NOTARIZE & SLOBS_NO_SIGN environment variables"
+  echo "  --disable         bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment)"
+  echo "  --reload-zshrc    reload env vars from .zshrc"
+  echo "  --compile         runs yarn compile in the desktop folder"
+  echo "  --x64             run yarn package:mac which builds for x86_64"
+  echo "  --arm64           run yarn package:mac-arm64"
+  echo ""
+  echo "Examples:"
+  echo "  $(basename "$0") --unset-all --compile"
+  echo ""
+  echo "Exit Status:"
+  echo "  0 on successful execution."
+  echo "  1 if Streamlabs desktop folder cannot be found."
+  exit 0
+}
+
+# ... (script logic) ...
+
+if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
+  display_usage
+  exit 0
+fi
+
+if [ ! -d "../desktop" ]; then
+  echo "Error: 'desktop' directory is not found."
+  exit 1
+fi
+
+ARCH=$(uname -m)
+
 # function setups codesign/notarize
 codesign_app() {
     for arg in "$@"; do
@@ -37,6 +75,10 @@ for arg in "$@"; do
   if [ "$arg" == "--reload-zshrc" ]; then
     echo "$0 run source ~/.zshrc"
     source ~/.zshrc
+  elif [ "$arg" == "--x64" ]; then
+    ARCH="x86_64"
+  elif [[ "$arg" == "--arm64" ]]; then
+    ARCH="arm64"
   fi
 done
 
@@ -61,8 +103,6 @@ output=$(which python2)
 export PYTHON_PATH=$output
 
 rm -rf dist # remove previous artifacts
-
-ARCH=$(uname -m)
 
 if [[ "$ARCH" == "arm64" ]]; then
     yarn package:mac-arm64
