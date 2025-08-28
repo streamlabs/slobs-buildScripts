@@ -13,7 +13,7 @@ function display_usage {
   echo "Options:"
   echo "  -h, --help        Display this help message and exit."
   echo "  --clean, -c       pass in this argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before."
-  echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64"
+  echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64 [mac-osx only]"
   echo ""
   echo "Examples:"
   echo "  $(basename "$0") --clean --arch=x86_64"
@@ -76,7 +76,7 @@ build_macos() {
 
 build_windows() {
   echo "Script $0 is running on Windows.."
-  if [ "$1" == "full" ]; then
+  if [[ "$1" == "--clean" || "$1" == "-c" ]]; then
     echo "Deleting cached build. Grab a coffee!"
     rm -rf build
   fi
