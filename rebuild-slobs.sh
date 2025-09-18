@@ -26,7 +26,6 @@ function display_usage {
 
 if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
   display_usage
-  exit 0
 fi
 
 if [ ! -d "../obs-studio" ]; then
