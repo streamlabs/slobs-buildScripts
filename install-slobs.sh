@@ -3,11 +3,11 @@
 function display_usage {
   echo "Usage: $(basename "$0") [OPTIONS]"
   echo ""
-  echo "Description: This script builds obs-studio-node."
+  echo "Description: This script builds obs-studio."
   echo ""
   echo "Options:"
   echo "  -h, --help        Display this help message and exit"
-  echo "  --build           sets build configuration (e.g., Debug, Release, RelWithDebInfo, MinSizeRel). Default is RelWithDebInfo"
+  echo "  --build           Sets build configuration (e.g., Debug, Release, RelWithDebInfo, MinSizeRel). Default is RelWithDebInfo"
   echo ""
   echo "Examples:"
   echo "  $(basename "$0") --build=Debug"

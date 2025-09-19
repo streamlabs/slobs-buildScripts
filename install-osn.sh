@@ -1,3 +1,25 @@
+function display_usage {
+  echo "Usage: $(basename "$0") [OPTIONS]"
+  echo ""
+  echo "Description: This script builds obs-studio-node."
+  echo ""
+  echo "Options:"
+  echo "  -h, --help        Display this help message and exit"
+  echo "  --build           Sets build configuration (e.g., Debug, Release, RelWithDebInfo, MinSizeRel). Default is RelWithDebInfo"
+  echo ""
+  echo "Examples:"
+  echo "  $(basename "$0") --build=Debug"
+  echo ""
+  echo "Exit Status:"
+  echo "  0 on successful execution."
+  echo "  1 if obs-studio folder cannot be found or build failure."
+  exit 0
+}
+
+if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
+  display_usage
+fi
+
 HOME_DIR=$(dirname "$(realpath "$0")")
 cd $HOME_DIR
 cd ..
@@ -6,6 +28,7 @@ cd obs-studio-node
 
 # Determine the operating system
 ostype=$(uname)
+cmake_args=()
 
 if [ "$ostype" == "Darwin" ]; then
   echo "Copying files from OSN-streambuild-app to desktop/node_modules"
@@ -23,12 +46,25 @@ if [ ! -d "./streamlabs-build.app" ]; then
   exit 1
 fi
 
+if [ ${#cmake_args[@]} -eq 0 ]; then
+  cmake_args+=(--config RelWithDebInfo)
+fi
+
+for arg in "$@"
+do
+  if [[ $arg == --build=* ]]; then
+    # Extract the value using parameter expansion
+    build_type="${arg#*=}"
+    cmake_args+=(--config ${build_type})
+  fi
+done
+
 # Remove previous artifacts. Force timestamps to get updated.
 rm -rf "$origin_dir/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node"
-rm -rf "$origin_dir/obs-studio-node/streamlabs-build.app/obs-studio-server/RelWithDebInfo"
+rm -rf "$origin_dir/obs-studio-node/streamlabs-build.app/obs-studio-server/*"
 
-# Build RelWithDebInfo artifact and install into distribute folder.
-cmake --build streamlabs-build.app --target install --config RelWithDebInfo
+# Build and install into distribute folder.
+cmake --build streamlabs-build.app --target install "${cmake_args[@]}"
 
 exit_status=$?
 
