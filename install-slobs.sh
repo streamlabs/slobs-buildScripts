@@ -34,6 +34,15 @@ cmake_args=()
 # Determine the operating system
 ostype=$(uname)
 
+for arg in "$@"
+do
+  if [[ $arg == --build=* ]]; then
+    # Extract the value using parameter expansion
+    build_type="${arg#*=}"
+    cmake_args+=(--config ${build_type})
+  fi
+done
+
 if [ "$ostype" == "Darwin" ]; then
   os="darwin"
   echo "preset: $preset"
@@ -41,21 +50,12 @@ if [ "$ostype" == "Darwin" ]; then
   rm -rf ./build_macos/packed_build/OBS.app
   rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
 
-  for arg in "$@"
-  do
-    if [[ $arg == --build=* ]]; then
-      # Extract the value using parameter expansion
-      build_type="${arg#*=}"
-      cmake_args+=(--config ${build_type})
-    fi
-  done
-
   echo "Time to run xcodebuild"
   cmake --build --target install --preset $preset -v "${cmake_args[@]}"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset=$1
   buildFolder="build_x64"
-  cmake --build build_x64 --target install -v --config RelWithDebInfo
+  cmake --build build_x64 --target install -v "${cmake_args[@]}"
 else
   echo "Unsupported operating system: $ostype"
   exit 1
