@@ -23,6 +23,8 @@ function display_usage {
   echo "  --compile         runs yarn compile in the desktop folder"
   echo "  --x64             run yarn package:mac which builds for x86_64"
   echo "  --arm64           run yarn package:mac-arm64"
+  echo "  -o, --open        run desktop from terminal"
+  echo "  -c, --clean       wipe cached node modules"
   echo ""
   echo "Examples:"
   echo "  $(basename "$0") --unset-all --compile"
@@ -44,6 +46,9 @@ if [ ! -d "../desktop" ]; then
 fi
 
 ARCH=$(uname -m)
+shouldOpen=false
+shouldClean=false
+shouldCompile=false
 
 # function setups codesign/notarize
 codesign_app() {
@@ -77,23 +82,28 @@ for arg in "$@"; do
     ARCH="x86_64"
   elif [[ "$arg" == "--arm64" ]]; then
     ARCH="arm64"
+  elif [[ "$arg" == "--clean" || "$arg" == "-c" ]]; then
+    shouldClean=true
+  elif [[ "$arg" == "--open" || "$arg" == "-o" ]]; then
+    shouldOpen=true
+  elif [ "$arg" == "--compile" ]; then
+    shouldCompile=true
   fi
 done
 
-if [ $# -ge 1 ]; then
-    codesign_app "$@"
-fi
+codesign_app "$@"
 
 cd "$origin_dir"
 cd ../desktop
 
-# Search args for 'yarn compile' option
-for arg in "$@"; do
-  if [ "$arg" == "--compile" ]; then
-    echo "$0 run yarn compile"
-    yarn compile
-  fi
-done
+if [[ "$shouldClean" == true ]]; then
+  rm -rf ../desktop/node_modules
+  yarn install
+  yarn compile
+elif [[ "$shouldCompile" == true ]]; then
+  echo "$0 run yarn compile"
+  yarn compile
+fi
 
 # set PYTHON_PATH to get around this issue: https://github.com/electron-userland/electron-builder/issues/6726
 echo "$0 searching for python2 to resolve electron-builder issue: https://github.com/electron-userland/electron-builder/issues/6726"
@@ -108,4 +118,17 @@ elif [[ "$ARCH" == "x86_64" ]]; then
     yarn package:mac
 else
     echo "$0 Unknown architecture: $ARCH"
+fi
+
+exit_status=$?
+if [ $exit_status -eq 0 ]; then
+  if [[ "$shouldOpen" == true ]]; then
+    if [[ "$ARCH" == "arm64" ]]; then
+        cd dist/mac-arm64
+    elif [[ "$ARCH" == "x86_64" ]]; then
+        cd dist/mac-x86_64
+    fi
+    # Run the app directly so we can capture stdout and skip auto-updater
+    ./Streamlabs\ Desktop.app/Contents/MacOS/Streamlabs\ Desktop --skip-update --nosync
+  fi
 fi
