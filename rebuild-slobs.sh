@@ -14,6 +14,7 @@ function display_usage {
   echo "  -h, --help        Display this help message and exit"
   echo "  -o, --open        Open the xcodeproj"
   echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64"
+  echo "  --clean, -c       pass in this argument to delete the cached build and all dependecies"
   echo ""
   echo "Examples:"
   echo "  $(basename "$0") --arch=x86_64"
@@ -62,6 +63,8 @@ if [ "$ostype" == "Darwin" ]; then
       cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${arch_value})
     elif [[ ("$arg" == "--open") || ("$arg" == "-o") ]]; then
       openXcode="open"
+    elif [[ ("$arg" == "--clean") || ("$arg" == "-c") ]]; then
+      rm -rf .deps
     fi
   done
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
@@ -69,6 +72,13 @@ elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
   rm -rf build_x64
   os="windows"
+
+  for arg in "$@"
+  do
+    if [[ ("$arg" == "--clean") || ("$arg" == "-c") ]]; then
+      rm -rf .deps
+    fi
+  done
 else
   echo "Unsupported operating system: $ostype"
   exit 1
