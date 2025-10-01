@@ -16,7 +16,7 @@ function display_usage {
   echo ""
   echo "Options:"
   echo "  -h, --help        Display this help message and exit."
-  echo "  --unset-codesign  remove SLOBS_NO_SIGN environment var so you can run codesign"
+  echo "  --unset-codesign  remove SLOBS_NO_SIGN environment var"
   echo "  --unset-all       remove both SLOBS_NO_NOTARIZE & SLOBS_NO_SIGN environment variables"
   echo "  --disable         bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment)"
   echo "  --reload-zshrc    reload env vars from .zshrc"
