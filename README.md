@@ -25,8 +25,8 @@ When you make changes to code, just hit _⌘+Shift+B_ (or CTRL+SHIFT+B on Window
 Below is example how you would execute this in terminal on Mac:
 ```
 ./rebuild-slobs.sh
-./install-slobs.sh --build=Debug
 ./rebuild-osn.sh
+./install-slobs.sh --build=Debug
 ./install-osn.sh --build=Debug
 ```
 # Testing SLOBS changes in obs-studio-node
