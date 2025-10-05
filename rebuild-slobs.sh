@@ -14,7 +14,7 @@ function display_usage {
   echo "  -h, --help        Display this help message and exit"
   echo "  -o, --open        Open the xcodeproj"
   echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64"
-  echo "  --clean, -c       pass in this argument to delete the cached build and all dependecies"
+  echo "  --clean, -c       pass in this argument to delete the .dep folder"
   echo ""
   echo "Examples:"
   echo "  $(basename "$0") --arch=x86_64"
