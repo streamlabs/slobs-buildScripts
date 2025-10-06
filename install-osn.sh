@@ -73,7 +73,7 @@ if [ $exit_status -eq 0 ]; then
 
   rm -rf $origin_dir/desktop/node_modules/obs-studio-node/bin
   # Copy obs-studio-server binary
-  rsync -aL "$distribution_dir/bin" "$origin_dir/desktop/node_modules/obs-studio-node"
+  cp -RL "$distribution_dir/bin" "$origin_dir/desktop/node_modules/obs-studio-node"
   cp -v "$distribution_dir/obs_studio_client.0.3.21.0.node" "$origin_dir/desktop/node_modules/obs-studio-node"
   cp -v "$distribution_dir/package.json" "$origin_dir/desktop/node_modules/obs-studio-node"
   cp -v "$distribution_dir/crashpad_database_util" "$origin_dir/desktop/node_modules/obs-studio-node"
