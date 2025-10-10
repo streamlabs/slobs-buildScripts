@@ -51,6 +51,11 @@ build_macos() {
     elif [[ "$arg" == "--clean" || "$arg" == "-c" ]]; then
       echo "$0 Deleting cached build. Grab a coffee!"
       rm -rf streamlabs-build.app
+      exit_status=$?
+      if [ "$exit_status" -ne 0 ]; then
+        echo "$0 failed to remove cached build"
+        exit 1
+      fi
     fi
   done
   echo "$0 Create streamlabs-build.app/distribute folder"
