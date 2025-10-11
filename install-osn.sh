@@ -69,16 +69,16 @@ cmake --build streamlabs-build.app --target install "${cmake_args[@]}"
 exit_status=$?
 
 if [ $exit_status -eq 0 ]; then
-  distribution_dir="$origin_dir/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node"
+  distribution_dir="$origin_dir"/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node
 
   rm -rf $origin_dir/desktop/node_modules/obs-studio-node/bin
   # Copy obs-studio-server binary
-  cp -RL "$distribution_dir/bin" "$origin_dir/desktop/node_modules/obs-studio-node"
-  cp -v "$distribution_dir/obs_studio_client.0.3.21.0.node" "$origin_dir/desktop/node_modules/obs-studio-node"
-  cp -v "$distribution_dir/package.json" "$origin_dir/desktop/node_modules/obs-studio-node"
-  cp -v "$distribution_dir/crashpad_database_util" "$origin_dir/desktop/node_modules/obs-studio-node"
-  cp -v "$distribution_dir/crashpad_handler" "$origin_dir/desktop/node_modules/obs-studio-node"
-  cp -v "$distribution_dir/crashpad_http_upload" "$origin_dir/desktop/node_modules/obs-studio-node"
+  cp -RL "$distribution_dir"/bin "$origin_dir"/desktop/node_modules/obs-studio-node
+  cp -v "$distribution_dir"/obs_studio_client.0.3.21.0.node "$origin_dir"/desktop/node_modules/obs-studio-node
+  cp -v "$distribution_dir"/package.json "$origin_dir"/desktop/node_modules/obs-studio-node
+  cp -v "$distribution_dir"/crashpad_database_util "$origin_dir"/desktop/node_modules/obs-studio-node
+  cp -v "$distribution_dir"/crashpad_handler "$origin_dir"/desktop/node_modules/obs-studio-node
+  cp -v "$distribution_dir"/crashpad_http_upload "$origin_dir"/desktop/node_modules/obs-studio-node
 else
   echo "building osn failed with exit code $exit_status."
 fi
