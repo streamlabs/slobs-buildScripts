@@ -44,3 +44,6 @@ cp -RL "$build_folder/OBS.app" ../obs-studio-node/streamlabs-build.app/libobs-sr
 
 cp  -R ./build_macos/packed_build/include ../obs-studio-node/streamlabs-build.app/libobs-src/
 cp  -R ./build_macos/packed_build/lib ../obs-studio-node/streamlabs-build.app/libobs-src/
+
+# copy updated headers
+cp  -RL ./build_macos/packed_build/Frameworks ../obs-studio-node/streamlabs-build.app/libobs-src/
