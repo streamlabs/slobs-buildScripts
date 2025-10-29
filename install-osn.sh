@@ -41,8 +41,9 @@ else
   exit 1
 fi
 
-if [ ! -d "./streamlabs-build.app" ]; then
-  echo "Error: 'streamlabs-build.app' directory is not found. Build obs-studio-node first."
+distribution_dir="$origin_dir"/desktop/node_modules/obs-studio-node/OSN.app/distribute/obs-studio-node
+if [ ! -d "$distribution_dir" ]; then
+  echo "Error: 'OSN.app' directory is not found. Build obs-studio-node first."
   exit 1
 fi
 
@@ -60,16 +61,15 @@ do
 done
 
 # Remove previous artifacts. Force timestamps to get updated.
-rm -rf "$origin_dir/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node"
-rm -rf "$origin_dir/obs-studio-node/streamlabs-build.app/obs-studio-server/*"
+rm -rf "$origin_dir/obs-studio-node/OSN.app/distribute/obs-studio-node"
+rm -rf "$origin_dir/obs-studio-node/OSN.app/obs-studio-server/*"
 
 # Build and install into distribute folder.
-cmake --build streamlabs-build.app --target install "${cmake_args[@]}"
+cmake --build build --target install "${cmake_args[@]}"
 
 exit_status=$?
 
 if [ $exit_status -eq 0 ]; then
-  distribution_dir="$origin_dir"/obs-studio-node/streamlabs-build.app/distribute/obs-studio-node
 
   rm -rf $origin_dir/desktop/node_modules/obs-studio-node/bin
   # Copy obs-studio-server binary
@@ -79,6 +79,9 @@ if [ $exit_status -eq 0 ]; then
   cp -v "$distribution_dir"/crashpad_database_util "$origin_dir"/desktop/node_modules/obs-studio-node
   cp -v "$distribution_dir"/crashpad_handler "$origin_dir"/desktop/node_modules/obs-studio-node
   cp -v "$distribution_dir"/crashpad_http_upload "$origin_dir"/desktop/node_modules/obs-studio-node
+  # Copy updated javascript files incase the developer locally modified them
+  cp "$origin_dir"/obs-studio-node/js/* "$origin_dir"/desktop/node_modules/obs-studio-node
+
 else
   echo "building osn failed with exit code $exit_status."
 fi

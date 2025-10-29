@@ -70,8 +70,20 @@ codesign_app() {
 }
 
 origin_dir=$(dirname "$(realpath "$0")")
-cd "$origin_dir"
+parent_dir=$(dirname "$origin_dir")
+app_dir="$parent_dir"/desktop/node_modules/obs-studio-node/OSN.app
+found_app=false
 "./remove-DSStore.sh" # remove hidden files that will break codesign
+
+if [ -d "$app_dir" ]; then
+  echo "backup OSN.app in $app_dir"
+  mkdir "$origin_dir"/tmp
+  mv $app_dir "$origin_dir"/tmp
+  rm -rf $app_dir
+  found_app=true
+fi
+
+
 
 # Search args for reload zsh option
 for arg in "$@"; do
@@ -118,6 +130,12 @@ elif [[ "$ARCH" == "x86_64" ]]; then
     yarn package:mac
 else
     echo "$0 Unknown architecture: $ARCH"
+fi
+
+if [[ "$found_app" == "true" ]]; then
+  echo "Restore $app_dir"
+  mv "$origin_dir"/tmp/OSN.app $app_dir
+  rm -rf "$origin_dir"/tmp
 fi
 
 exit_status=$?
