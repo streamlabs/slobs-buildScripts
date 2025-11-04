@@ -37,13 +37,13 @@ cp  -Rv "$build_folder/OBS.app/Contents/Plugins" ../desktop/node_modules/obs-stu
 # copy to OSN
 
 # make sure old artifacts are removed.
-rm -rf ./obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
-#rm -rf ./obs-studio-node/streamlabs-build.app/libobs-src/Frameworks
-cp -RL "$build_folder/OBS.app/Contents/Frameworks" ../obs-studio-node/streamlabs-build.app/libobs-src/
-cp -RL "$build_folder/OBS.app" ../obs-studio-node/streamlabs-build.app/libobs-src
+rm -rf ./obs-studio-node/build/libobs-src/OBS.app
+#rm -rf ./obs-studio-node/build/libobs-src/Frameworks
+cp -RL "$build_folder/OBS.app/Contents/Frameworks" ../obs-studio-node/build/libobs-src/
+cp -RL "$build_folder/OBS.app" ../obs-studio-node/build/libobs-src
 
-cp  -R ./build_macos/packed_build/include ../obs-studio-node/streamlabs-build.app/libobs-src/
-cp  -R ./build_macos/packed_build/lib ../obs-studio-node/streamlabs-build.app/libobs-src/
+cp  -R ./build_macos/packed_build/include ../obs-studio-node/build/libobs-src/
+cp  -R ./build_macos/packed_build/lib ../obs-studio-node/build/libobs-src/
 
 # copy updated headers
-cp  -RL ./build_macos/packed_build/Frameworks ../obs-studio-node/streamlabs-build.app/libobs-src/
+cp  -RL ./build_macos/packed_build/Frameworks ../obs-studio-node/build/libobs-src/

@@ -48,7 +48,7 @@ if [ "$ostype" == "Darwin" ]; then
   echo "preset: $preset"
   echo "Remove old artifacts to ensure they are properly replaced"
   rm -rf ./build_macos/packed_build/OBS.app
-  rm -rf ../obs-studio-node/streamlabs-build.app/libobs-src/OBS.app
+  rm -rf ../obs-studio-node/build/libobs-src/OBS.app
 
   echo "Time to run xcodebuild"
   cmake --build --target install --preset $preset -v "${cmake_args[@]}"

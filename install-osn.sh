@@ -6,6 +6,7 @@ function display_usage {
   echo "Options:"
   echo "  -h, --help        Display this help message and exit"
   echo "  --build           Sets build configuration (e.g., Debug, Release, RelWithDebInfo, MinSizeRel). Default is RelWithDebInfo"
+  echo "  --dsym            Writes *.dSYM files"
   echo ""
   echo "Examples:"
   echo "  $(basename "$0") --build=Debug"
@@ -31,7 +32,7 @@ ostype=$(uname)
 cmake_args=()
 
 if [ "$ostype" == "Darwin" ]; then
-  echo "Copying files from OSN-streambuild-app to desktop/node_modules"
+  echo "Copying files from build to desktop/node_modules/obs-studio-node"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   cmake --build build --target install --config RelWithDebInfo
   ret=$?  # Capture the exit status of the build
@@ -51,12 +52,15 @@ if [ ${#cmake_args[@]} -eq 0 ]; then
   cmake_args+=(--config RelWithDebInfo)
 fi
 
+write_dsym=false
 for arg in "$@"
 do
   if [[ $arg == --build=* ]]; then
     # Extract the value using parameter expansion
     build_type="${arg#*=}"
     cmake_args+=(--config ${build_type})
+  elif [[ "$arg" == "--dsym" ]]; then
+    write_dsym=true
   fi
 done
 
@@ -81,6 +85,10 @@ if [ $exit_status -eq 0 ]; then
   cp -v "$distribution_dir"/crashpad_http_upload "$origin_dir"/desktop/node_modules/obs-studio-node
   # Copy updated javascript files incase the developer locally modified them
   cp "$origin_dir"/obs-studio-node/js/* "$origin_dir"/desktop/node_modules/obs-studio-node
+
+  if [ $write_dsym == true ]; then
+    python $HOME_DIR/write-debug-symbols.py $distribution_dir
+  fi
 
 else
   echo "building osn failed with exit code $exit_status."
