@@ -43,10 +43,6 @@ else
 fi
 
 distribution_dir="$origin_dir"/desktop/node_modules/obs-studio-node/OSN.app/distribute/obs-studio-node
-if [ ! -d "$distribution_dir" ]; then
-  echo "Error: 'OSN.app' directory is not found. Build obs-studio-node first."
-  exit 1
-fi
 
 if [ ${#cmake_args[@]} -eq 0 ]; then
   cmake_args+=(--config RelWithDebInfo)
@@ -70,6 +66,11 @@ rm -rf "$origin_dir/obs-studio-node/OSN.app/obs-studio-server/*"
 
 # Build and install into distribute folder.
 cmake --build build --target install "${cmake_args[@]}"
+
+if [ ! -d "$distribution_dir" ]; then
+  echo "$0 Error: 'OSN.app' directory is not found. Build obs-studio-node first."
+  exit 1
+fi
 
 exit_status=$?
 

@@ -17,12 +17,12 @@ else
 fi
 
 if [ ! -d "../obs-studio-node" ]; then
-  echo "Error: 'obs-studio-node' directory is not found. Build obs-studio-node first."
+  echo "$0 Error: 'obs-studio-node' directory is not found. Build obs-studio-node first."
   exit 1
 fi
 
 if [ ! -d "../desktop" ]; then
-  echo "Error: 'desktop' directory is not found. Build Streamlabs Desktop first"
+  echo "$0 Error: 'desktop' directory is not found. Build Streamlabs Desktop first"
   exit 1
 fi
 
