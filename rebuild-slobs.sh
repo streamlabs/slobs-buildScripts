@@ -53,36 +53,29 @@ ostype=$(uname)
 if [ "$ostype" == "Darwin" ]; then
   echo "$0 is running on macOS."
   rm -rf build_macos
-
-  for arg in "$@"
-  do
-    # Check if the argument starts with --arch=
-    if [[ $arg == --arch=* ]]; then
-      # Extract the value using parameter expansion
-      arch_value="${arg#*=}"
-      cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${arch_value})
-    elif [[ ("$arg" == "--open") || ("$arg" == "-o") ]]; then
-      openXcode="open"
-    elif [[ ("$arg" == "--clean") || ("$arg" == "-c") ]]; then
-      rm -rf .deps
-    fi
-  done
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset="windows-x64"
   buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
   rm -rf build_x64
   os="windows"
-
-  for arg in "$@"
-  do
-    if [[ ("$arg" == "--clean") || ("$arg" == "-c") ]]; then
-      rm -rf .deps
-    fi
-  done
 else
   echo "Unsupported operating system: $ostype"
   exit 1
 fi
+
+for arg in "$@"
+do
+  # Check if the argument starts with --arch=
+  if [[ $arg == --arch=* ]]; then
+    # Extract the value using parameter expansion
+    arch_value="${arg#*=}"
+    cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${arch_value})
+  elif [[ ("$arg" == "--open") || ("$arg" == "-o") ]]; then
+    openXcode="open"
+  elif [[ ("$arg" == "--clean") || ("$arg" == "-c") ]]; then
+    rm -rf .deps
+  fi
+done
 
 cmake --preset "$preset" -DCMAKE_INSTALL_PREFIX="$buildFolder" -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT" "${cmake_args[@]}"
 

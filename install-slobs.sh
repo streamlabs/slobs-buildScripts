@@ -53,7 +53,8 @@ if [ "$ostype" == "Darwin" ]; then
   echo "Time to run xcodebuild"
   cmake --build --target install --preset $preset -v "${cmake_args[@]}"
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
-  preset=$1
+  preset="windows-x64"
+  os="windows"
   buildFolder="build_x64"
   cmake --build build_x64 --target install -v "${cmake_args[@]}"
 else
