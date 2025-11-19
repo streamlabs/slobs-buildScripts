@@ -79,13 +79,13 @@ if [ $exit_status -eq 0 ]; then
   rm -rf $origin_dir/desktop/node_modules/obs-studio-node/bin
   # Copy obs-studio-server binary
   cp -RL "$distribution_dir"/bin "$origin_dir"/desktop/node_modules/obs-studio-node
-  cp -v "$distribution_dir"/obs_studio_client.0.3.21.0.node "$origin_dir"/desktop/node_modules/obs-studio-node
+  cp -v "$distribution_dir"/*.node "$origin_dir"/desktop/node_modules/obs-studio-node
   cp -v "$distribution_dir"/package.json "$origin_dir"/desktop/node_modules/obs-studio-node
   cp -v "$distribution_dir"/crashpad_database_util "$origin_dir"/desktop/node_modules/obs-studio-node
   cp -v "$distribution_dir"/crashpad_handler "$origin_dir"/desktop/node_modules/obs-studio-node
   cp -v "$distribution_dir"/crashpad_http_upload "$origin_dir"/desktop/node_modules/obs-studio-node
   # Copy updated javascript files incase the developer locally modified them
-  cp "$origin_dir"/obs-studio-node/js/* "$origin_dir"/desktop/node_modules/obs-studio-node
+  cp -v "$origin_dir"/obs-studio-node/js/* "$origin_dir"/desktop/node_modules/obs-studio-node
 
   if [ $write_dsym == true ]; then
     python $HOME_DIR/write-debug-symbols.py $distribution_dir
