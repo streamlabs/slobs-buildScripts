@@ -56,8 +56,7 @@ codesign_app() {
         # The settings below should come from the bash profile ideally.
         if [[ "$arg" == "--disable" ]]; then
             export SLOBS_NO_SIGN="true"
-            export APPLE_SLD_IDENTITY="false"
-            echo "$0 Set SLOBS_NO_SIGN=true and APPLE_SLD_IDENTITY=false to disable codesign"
+            echo "$0 Set SLOBS_NO_SIGN=true to disable codesign"
         elif [[ "$arg" == "--unset-codesign" ]]; then
             unset SLOBS_NO_SIGN
             echo "$0 unset SLOBS_NO_SIGN env var"
