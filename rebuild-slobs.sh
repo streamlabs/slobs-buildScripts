@@ -77,6 +77,7 @@ do
   fi
 done
 
+echo "cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE=$PROVISIONING_PROFILE -DOBS_CODESIGN_TEAM=$CODESIGN_TEAM -DOBS_CODESIGN_IDENTITY=$CODESIGN_IDENT ${cmake_args[@]}"
 cmake --preset "$preset" -DCMAKE_INSTALL_PREFIX="$buildFolder" -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT" "${cmake_args[@]}"
 
 if [[ "$os" == "darwin" && "$openXcode" == "open" ]]; then

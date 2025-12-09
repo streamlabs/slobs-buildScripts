@@ -56,6 +56,7 @@ elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset="windows-x64"
   os="windows"
   buildFolder="build_x64"
+  echo "preset: $preset"
   cmake --build build_x64 --target install -v "${cmake_args[@]}"
 else
   echo "Unsupported operating system: $ostype"
