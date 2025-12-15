@@ -34,21 +34,21 @@ cmake_args=()
 # Determine the operating system
 ostype=$(uname)
 
-for arg in "$@"
-do
-  if [[ $arg == --build=* ]]; then
-    # Extract the value using parameter expansion
-    build_type="${arg#*=}"
-    cmake_args+=(--config ${build_type})
-  fi
-done
-
 if [ "$ostype" == "Darwin" ]; then
   os="darwin"
   echo "preset: $preset"
   echo "Remove old artifacts to ensure they are properly replaced"
   rm -rf ./build_macos/packed_build/OBS.app
   rm -rf ../obs-studio-node/build/libobs-src/OBS.app
+  # Currently on Windows the Debug config doesn't work due to obs-vst MD_DynamicRelease mismatch issues.
+  for arg in "$@"
+  do
+    if [[ $arg == --build=* ]]; then
+      # Extract the value using parameter expansion
+      build_type="${arg#*=}"
+      cmake_args+=(--config ${build_type})
+    fi
+  done
 
   echo "Time to run xcodebuild"
   cmake --build --target install --preset $preset -v "${cmake_args[@]}"
@@ -57,7 +57,8 @@ elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   os="windows"
   buildFolder="build_x64"
   echo "preset: $preset"
-  cmake --build build_x64 --target install -v "${cmake_args[@]}"
+  cmake --build build_x64 --target install --config RelWithDebInfo "${cmake_args[@]}"
+  cmake --install build_x64 --prefix "$origin_dir/desktop/node_modules/obs-studio-node/build/libobs-src" -v --config RelWithDebInfo "${cmake_args[@]}"
 else
   echo "Unsupported operating system: $ostype"
   exit 1
