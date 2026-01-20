@@ -12,7 +12,7 @@
 function display_usage {
   echo "Usage: $(basename "$0") [OPTIONS]"
   echo ""
-  echo "Description: This script builds the Streamlabs Desktop.app."
+  echo "Description: This script builds the Streamlabs Desktop.app on MacOS."
   echo ""
   echo "Options:"
   echo "  -h, --help        Display this help message and exit."
@@ -38,6 +38,13 @@ function display_usage {
 if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
   display_usage
   exit 0
+fi
+
+# Determine the operating system
+ostype=$(uname)
+if [ "$ostype" != "Darwin" ]; then
+  echo "Error: This script is intended to run on macOS only."
+  exit 1
 fi
 
 if [ ! -d "../desktop" ]; then
