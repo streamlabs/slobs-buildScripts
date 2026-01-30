@@ -7,7 +7,7 @@
 # --disable to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment)
 # --reload-zshrc: reload env vars from .zshrc
 # --compile: runs yarn compile in the desktop folder
-# Example: ./build-frontend-desktop-app.sh --unset-all --compile
+# Example: ./build-frontend-desktop-app.sh --compile --arch=arm64
 
 function display_usage {
   echo "Usage: $(basename "$0") [OPTIONS]"
@@ -21,13 +21,12 @@ function display_usage {
   echo "  --disable         bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment)"
   echo "  --reload-zshrc    reload env vars from .zshrc"
   echo "  --compile         runs yarn compile in the desktop folder"
-  echo "  --x64             run yarn package:mac which builds for x86_64"
-  echo "  --arm64           run yarn package:mac-arm64"
+  echo "  --arch            sets ARCH to arm64 or x86_64. Defaults to current machine arch."
   echo "  -o, --open        run desktop from terminal"
   echo "  -c, --clean       wipe cached node modules"
   echo ""
   echo "Examples:"
-  echo "  $(basename "$0") --unset-all --compile"
+  echo "  $(basename "$0") --clean --arch=arm64"
   echo ""
   echo "Exit Status:"
   echo "  0 on successful execution."
@@ -96,10 +95,9 @@ for arg in "$@"; do
   if [ "$arg" == "--reload-zshrc" ]; then
     echo "$0 run source ~/.zshrc"
     source ~/.zshrc
-  elif [ "$arg" == "--x64" ]; then
-    ARCH="x86_64"
-  elif [[ "$arg" == "--arm64" ]]; then
-    ARCH="arm64"
+  elif [[ $arg == --arch=* ]]; then
+    # Extract the value using parameter expansion
+    ARCH="${arg#*=}"
   elif [[ "$arg" == "--clean" || "$arg" == "-c" ]]; then
     shouldClean=true
   elif [[ "$arg" == "--open" || "$arg" == "-o" ]]; then
@@ -113,6 +111,16 @@ codesign_app "$@"
 
 cd "$origin_dir"
 cd ../desktop
+
+# set npm_config_arch based on architecture so the dependencies will use the correct arch. See desktop repo: scripts/install-native-deps.js
+if [[ "$ARCH" == "arm64" ]]; then
+  export npm_config_arch="arm64"
+elif [[ "$ARCH" == "x86_64" ]]; then
+  export npm_config_arch="x64"
+else
+  echo "$0 Unknown architecture: $ARCH"
+  exit 0
+fi
 
 if [[ "$shouldClean" == true ]]; then
   rm -rf ../desktop/node_modules
@@ -131,11 +139,11 @@ export PYTHON_PATH=$output
 rm -rf dist # remove previous artifacts
 
 if [[ "$ARCH" == "arm64" ]]; then
-    yarn package:mac-arm64
+  echo "$0 run yarn package:mac-arm64"
+  yarn package:mac-arm64
 elif [[ "$ARCH" == "x86_64" ]]; then
-    yarn package:mac
-else
-    echo "$0 Unknown architecture: $ARCH"
+  echo "$0 run yarn package:mac"
+  yarn package:mac
 fi
 
 if [[ "$found_app" == "true" ]]; then
