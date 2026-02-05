@@ -1,8 +1,8 @@
 #!/bin/bash
 # Usage:
-# ./build-frontend-desktop-app.sh [--disable | --unset-codesign | --unset-all | --compile | --reload-zshrc]
+# ./build-frontend-desktop-app.sh [--disable | --unset-SLOBS_NO_SIGN | --unset-all | --compile | --reload-zshrc]
 # Arguments:
-# --unset-codesign to remove SLOBS_NO_SIGN environment var so you can run codesign
+# --unset-SLOBS_NO_SIGN to remove SLOBS_NO_SIGN environment var so you can run codesign
 # --unset-all to remove both SLOBS_NO_NOTARIZE & SLOBS_NO_SIGN environment variables
 # --disable to bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment)
 # --reload-zshrc: reload env vars from .zshrc
@@ -16,7 +16,7 @@ function display_usage {
   echo ""
   echo "Options:"
   echo "  -h, --help        Display this help message and exit."
-  echo "  --unset-codesign  remove SLOBS_NO_SIGN environment var"
+  echo "  --unset-SLOBS_NO_SIGN  remove SLOBS_NO_SIGN environment var"
   echo "  --unset-all       remove both SLOBS_NO_NOTARIZE & SLOBS_NO_SIGN environment variables"
   echo "  --disable         bypass codesign completely (even if you have APPLE_SLD_IDENTITY set in your environment)"
   echo "  --reload-zshrc    reload env vars from .zshrc"
@@ -63,7 +63,7 @@ codesign_app() {
         if [[ "$arg" == "--disable" ]]; then
             export SLOBS_NO_SIGN="true"
             echo "$0 Set SLOBS_NO_SIGN=true to disable codesign"
-        elif [[ "$arg" == "--unset-codesign" ]]; then
+        elif [[ "$arg" == "--unset-SLOBS_NO_SIGN" ]]; then
             unset SLOBS_NO_SIGN
             echo "$0 unset SLOBS_NO_SIGN env var"
         elif [[ "$arg" == "--unset-all" ]]; then
@@ -98,6 +98,7 @@ for arg in "$@"; do
   elif [[ $arg == --arch=* ]]; then
     # Extract the value using parameter expansion
     ARCH="${arg#*=}"
+    export ARCH="$ARCH"
   elif [[ "$arg" == "--clean" || "$arg" == "-c" ]]; then
     shouldClean=true
   elif [[ "$arg" == "--open" || "$arg" == "-o" ]]; then
@@ -112,19 +113,22 @@ codesign_app "$@"
 cd "$origin_dir"
 cd ../desktop
 
-# set npm_config_arch based on architecture so the dependencies will use the correct arch. See desktop repo: scripts/install-native-deps.js
-if [[ "$ARCH" == "arm64" ]]; then
-  export npm_config_arch="arm64"
-elif [[ "$ARCH" == "x86_64" ]]; then
-  export npm_config_arch="x64"
-else
-  echo "$0 Unknown architecture: $ARCH"
-  exit 0
-fi
-
 if [[ "$shouldClean" == true ]]; then
   rm -rf ../desktop/node_modules
-  yarn install
+  npm_config_arch=$ARCH
+  if [[ "$ARCH" == "x86_64" ]]; then
+    npm_config_arch="x64"
+  fi
+  echo "$0 run arch -$ARCH node -v"
+  arch -$ARCH node -v
+  exit_status=$?
+  if [ $exit_status -ne 0 ]; then
+    echo "Error: installed node does not match the desired architecture. See: https://gist.github.com/LeZuse/bf838718ff2689c5fc035c5a6825a11c"
+    exit 1
+  fi
+  echo "$0 run npm_config_arch=$npm_config_arch yarn install"
+  npm_config_arch=$npm_config_arch yarn install
+  echo "$0 run yarn compile"
   yarn compile
 elif [[ "$shouldCompile" == true ]]; then
   echo "$0 run yarn compile"
