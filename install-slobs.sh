@@ -23,9 +23,12 @@ if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
 fi
 
 # Build & run the install target for streamlabs-obs. Then Copy it into other projects
-origin_dir=$(dirname "$(realpath "$0")")
-cd $origin_dir
-cd ../obs-studio/
+HOME_DIR=$(dirname "$(realpath "$0")")
+cd "$HOME_DIR" # start in base folder
+cd ..
+origin_dir=$(pwd) # Save the starting directory
+echo "$0 origin_dir: $origin_dir"
+cd obs-studio/
 
 preset="macos"
 buildFolder="build_macos"
@@ -68,7 +71,7 @@ exit_status=$?
 
 if [ $exit_status -eq 0 ]; then
     # now copy into desktop
-    cd "$origin_dir"
+    cd "$HOME_DIR"
     "./copy-slobs-artifacts.sh"
 else
   echo "failed running the install target with exit code $exit_status."
