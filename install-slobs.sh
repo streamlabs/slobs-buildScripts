@@ -60,6 +60,7 @@ elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   os="windows"
   buildFolder="build_x64"
   echo "preset: $preset"
+  cmake --build build_x64 --preset $preset --config RelWithDebInfo --parallel
   cmake --build build_x64 --target install --config RelWithDebInfo "${cmake_args[@]}"
   cmake --install build_x64 --prefix "$origin_dir/desktop/node_modules/obs-studio-node/build/libobs-src" -v --config RelWithDebInfo "${cmake_args[@]}"
 else
