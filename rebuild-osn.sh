@@ -17,7 +17,7 @@ function display_usage {
   echo "  --install         sets the CMAKE_INSTALL_PREFIX (so should be the FULL non-relative path). By default, attempts to write to ../desktop/node_modules/obs-studio-node/OSN.app to create an app bundle that enables browser sources to work."
   echo ""
   echo "Example:"
-  echo "  $(basename "$0") --clean --arch=x86_64 --install=~/projects/streamlabs/obs-studio-node"
+  echo "  $(basename "$0") --clean --arch=x86_64"
   echo ""
   echo "Exit Status:"
   echo "  0 on successful execution."
