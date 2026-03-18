@@ -47,3 +47,10 @@ cp  -R ./build_macos/packed_build/lib ../obs-studio-node/build/libobs-src/
 
 # copy updated headers
 cp  -RL ./build_macos/packed_build/Frameworks ../obs-studio-node/build/libobs-src/
+
+# Update the libs stored in OSN.app/distribute/obs-studio-node
+distribution_dir=../desktop/node_modules/obs-studio-node/OSN.app/distribute/obs-studio-node
+if [ -d "$distribution_dir" ]; then
+  cp -RL "$build_folder/OBS.app/Contents/Frameworks/" "$distribution_dir"/Frameworks/
+  echo "Copied updated frameworks to $distribution_dir/Frameworks/"
+fi
