@@ -79,7 +79,9 @@ build_macos() {
     #cd ..
     cmake --build . --target install --config RelWithDebInfo
   else
-    echo "failed building obs-studio-node with exit code $exit_status."
+    RED='\e[31m'
+    NC='\e[0m'
+    echo -e "${RED}failed building obs-studio-node with exit code $exit_status.${NC}"
     exit 1
   fi
 }
@@ -104,7 +106,8 @@ build_windows() {
     cmake --build . --target install --config RelWithDebInfo
   else
     RED='\e[31m'
-    echo -e "${RED}failed building obs-studio-node with exit code $exit_status. Make sure electron.exe (Streamlabs Desktop) is not running (it can lock files)."
+    NC='\e[0m'
+    echo -e "${RED}failed building obs-studio-node with exit code $exit_status. Make sure electron.exe (Streamlabs Desktop) is not running (it can lock files).${NC}"
     exit 1
   fi
 }
