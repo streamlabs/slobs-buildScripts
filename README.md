@@ -22,16 +22,34 @@ github workflow does. _Note_: Xcode currently defaults to Debug for OSN & SLOBS 
 
 When you make changes to code, just hit _⌘+Shift+B_ (or CTRL+SHIFT+B on Windows) in Visual Studio Code to copy over the updated artifacts (behind the scenes this will run `update-everything-from-slobs.sh`). Sometimes drastic changes may require rebuild which means running `rebuild-osn.sh --clean`. This will trigger a complete rebuild of obs-studio-node causing it to redownload all deps. Grab a coffee this might take a few mins. Note- the local libobs_src folder will be replaced by the downloaded artifact (set by LibOBSVersion). You'll likely want to run `install-slobs.sh` to overwrite this with your local changes.
 
-Below is example how you would execute this in terminal on Mac:
+Below is example how you would execute this in terminal on Mac if you only made changes in OSN:
 ```
-./rebuild-slobs.sh
 ./rebuild-osn.sh
+./install-osn.sh --build=Debug
+```
+
+If you made local changes in both OSN/SLOBS (OSN gets built *twice* because the first pass will build OSN with a SLOBS version it downloads. Second pass will compile with the local slobs changes):
+```
+./rebuild-osn.sh
+./install-osn.sh --build=Debug
+./rebuild-slobs.sh
 ./install-slobs.sh --build=Debug
 ./install-osn.sh --build=Debug
 ```
-# Testing SLOBS changes in obs-studio-node
+# Testing SLOBS changes in obs-studio-node/desktop
 
-Run `update-everything-from-SLOBS.sh` script (via the _⌘+Shift+B_ hotkey combination) to build `streamlabs/obs-studio` & `obs-studio-node`. The resulting artifacts will be copied into `streamlabs/desktop`. Now when you execute the `yarn run test` command in OSN directory, it will utilize the latest compiled artifact. In addition, _desktop_ will also be updated.
+Run `update-everything-from-SLOBS.sh` script (via the _⌘+Shift+B_ hotkey combination) to build `streamlabs/obs-studio` & `obs-studio-node` (however that assumes RelWithDebugInfo config). The resulting artifacts will be copied into `streamlabs/desktop`. Now when you execute the `yarn run test` command in OSN directory, it will utilize the latest compiled artifact. In addition, _desktop_ will also be updated.
+
+Behind the scenes the equivalent would be this:
+```
+./install-slobs.sh --build=Debug
+./install-osn.sh --build=Debug
+```
+
+If you only updated SLOBS and you just want to verify the changes with Desktop, you could just run:
+```
+./install-slobs.sh --build=Debug
+```
 
 # Environment variables
 

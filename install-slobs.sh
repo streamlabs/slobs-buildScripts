@@ -41,7 +41,6 @@ if [ "$ostype" == "Darwin" ]; then
   os="darwin"
   echo "preset: $preset"
   echo "Remove old artifacts to ensure they are properly replaced"
-  rm -rf ./build_macos/packed_build/OBS.app
   rm -rf ../obs-studio-node/build/libobs-src/OBS.app
   # Currently on Windows the Debug config doesn't work due to obs-vst MD_DynamicRelease mismatch issues.
   for arg in "$@"

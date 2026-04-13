@@ -42,7 +42,7 @@ cd obs-studio/
 
 os="darwin"
 preset="macos"
-buildFolder="build_macos/packed_build"
+buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
 openXcode=""
 arch_value=""
 cmake_args=()
@@ -55,7 +55,6 @@ if [ "$ostype" == "Darwin" ]; then
   rm -rf build_macos
 elif [[ "$ostype" == MINGW* || "$ostype" == CYGWIN* ]]; then
   preset="windows-x64"
-  buildFolder="$origin_dir/obs-studio-node/build/libobs-src"
   rm -rf build_x64
   os="windows"
 else
