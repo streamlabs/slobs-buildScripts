@@ -1,4 +1,24 @@
 #!/bin/bash
+function display_usage {
+  echo "Usage: $(basename "$0")"
+  echo ""
+  echo "Description: This script copies SLOBS artifacts to Streamlabs Desktop (MacOS only)."
+  echo ""
+  echo "Options:"
+  echo "  -h, --help        Display this help message and exit"
+  echo ""
+  echo "Examples:"
+  echo "  $(basename "$0")"
+  echo ""
+  echo "Exit Status:"
+  echo "  0 on successful execution."
+  echo "  1 if obs-studio-node or Desktop folder cannot be found or build failure."
+  exit 0
+}
+if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
+  display_usage
+fi
+
 origin_dir=$(dirname "$(realpath "$0")")
 cd $origin_dir
 cd ../obs-studio/
@@ -22,7 +42,7 @@ if [ ! -d "../obs-studio-node" ]; then
 fi
 
 if [ ! -d "../desktop" ]; then
-  echo "$0 Error: 'desktop' directory is not found. Build Streamlabs Desktop first"
+  echo "$0 Error: 'desktop' directory is not found. Build Streamlabs Desktop first."
   exit 1
 fi
 
