@@ -15,6 +15,7 @@ function display_usage {
   echo "  --clean, -c       pass in this argument to delete the cached build for a full rebuild which can take quite awhile. If you do not, then the build will compile really fast if you built it before."
   echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64 [mac-osx only]. By default, cmake will use the host arch."
   echo "  --install         sets the CMAKE_INSTALL_PREFIX (so should be the FULL non-relative path). By default, attempts to write to ../desktop/node_modules/obs-studio-node/OSN.app to create an app bundle that enables browser sources to work."
+  echo "  --build, -b       pass in this argument to run the cmake --build command after configuring with cmake"
   echo ""
   echo "Example:"
   echo "  $(basename "$0") --clean --arch=x86_64"
@@ -40,7 +41,7 @@ origin_dir=$(pwd) # Save the starting directory
 app_dir="$origin_dir"/desktop/node_modules/obs-studio-node/OSN.app
 
 cd obs-studio-node || { echo "Error: Failed to navigate to obs-studio-node."; exit 1; }
-
+can_build=false
 build_macos() {
   cmake_args=()
   for arg in "$@"
@@ -53,6 +54,8 @@ build_macos() {
     elif [[ $arg == --install=* ]]; then
       # Extract the value using parameter expansion
       app_dir="${arg#*=}"
+    elif [[ ("$arg" == "--build") || ("$arg" == "-b") ]]; then
+      can_build=true
     elif [[ "$arg" == "--clean" || "$arg" == "-c" ]]; then
       echo "$0 Deleting cached build. Grab a coffee!"
       rm -rf build
@@ -75,9 +78,9 @@ build_macos() {
   exit_status=$?
 
   if [ "$exit_status" -eq 0 ]; then
-    echo "built obs-studio-node successfully."
-    #cd ..
-    cmake --build . --target install --config RelWithDebInfo
+    if [[ "$can_build" == true ]]; then
+      cmake --build . --target install --config RelWithDebInfo
+    fi
   else
     RED='\e[31m'
     NC='\e[0m'
@@ -102,8 +105,9 @@ build_windows() {
   exit_status=$?
 
   if [ "$exit_status" -eq 0 ]; then
-    echo "Built obs-studio-node successfully."
-    cmake --build . --target install --config RelWithDebInfo
+    if [[ "$can_build" == true ]]; then
+      cmake --build . --target install --config RelWithDebInfo
+    fi
   else
     RED='\e[31m'
     NC='\e[0m'

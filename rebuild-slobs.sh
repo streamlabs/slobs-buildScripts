@@ -15,6 +15,7 @@ function display_usage {
   echo "  -o, --open        Open the xcodeproj"
   echo "  --arch            sets CMAKE_OSX_ARCHITECTURES, arm64 or x86_64"
   echo "  --clean, -c       pass in this argument to delete the .dep folder"
+  echo "  --build, -b       pass in this argument to run the cmake --build command after configuring with cmake"
   echo ""
   echo "Examples:"
   echo "  $(basename "$0") --arch=x86_64"
@@ -62,6 +63,7 @@ else
   exit 1
 fi
 
+can_build=false
 for arg in "$@"
 do
   # Check if the argument starts with --arch=
@@ -73,14 +75,30 @@ do
     openXcode="open"
   elif [[ ("$arg" == "--clean") || ("$arg" == "-c") ]]; then
     rm -rf .deps
+  elif [[ ("$arg" == "--build") || ("$arg" == "-b") ]]; then
+    can_build=true
   fi
 done
 
 echo "cmake --preset $preset -DCMAKE_INSTALL_PREFIX=$buildFolder -DOBS_PROVISIONING_PROFILE=$PROVISIONING_PROFILE -DOBS_CODESIGN_TEAM=$CODESIGN_TEAM -DOBS_CODESIGN_IDENTITY=$CODESIGN_IDENT ${cmake_args[@]}"
 cmake --preset "$preset" -DCMAKE_INSTALL_PREFIX="$buildFolder" -DOBS_PROVISIONING_PROFILE="$PROVISIONING_PROFILE" -DOBS_CODESIGN_TEAM="$CODESIGN_TEAM" -DOBS_CODESIGN_IDENTITY="$CODESIGN_IDENT" "${cmake_args[@]}"
 
-if [[ "$os" == "darwin" && "$openXcode" == "open" ]]; then
-  # Relaunch Xcode; this way all the targets will be refreshed properly
-  echo "Attempting to re-open the xcode project"
-  open "build_macos/obs-studio.xcodeproj"
+if [ "$ostype" == "Darwin" ]; then
+  exit_status=$?
+
+  if [[ ("$exit_status" -eq 0) ]]; then
+    echo "Built obs-studio successfully."
+    if [[ "$can_build" == true ]]; then
+      cmake --build --target install --preset $preset -v "${cmake_args[@]}"
+    fi
+
+    if [[ "$openXcode" == "open" ]]; then
+      open build_macos/obs-studio-node.xcodeproj
+    fi
+  else
+    RED='\e[31m'
+    NC='\e[0m'
+    echo -e "${RED}failed building obs-studio with exit code $exit_status.${NC}"
+    exit 1
+  fi
 fi
