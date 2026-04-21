@@ -46,7 +46,7 @@ Behind the scenes the equivalent would be this:
 ./install-osn.sh --build=Debug
 ```
 
-If you only updated SLOBS and you just want to verify the changes with Desktop, you could just run:
+If you only updated SLOBS and you just want to verify the changes with Desktop, you could just run this command (because the script explicitly copies updates into Desktop/node_modules folder):
 ```
 ./install-slobs.sh --build=Debug
 ```
