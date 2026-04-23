@@ -5,6 +5,7 @@ cd ../obs-studio
 rm -rf plugins
 rm -rf .git/modules/plugins/win-dshow
 
+git checkout plugins
 git clean -xfd
 git submodule foreach --recursive git clean -xfd
 git reset --hard
