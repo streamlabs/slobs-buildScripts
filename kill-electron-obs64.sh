@@ -3,7 +3,7 @@
 function display_usage {
   echo "Usage: $(basename "$0") [OPTIONS]"
   echo ""
-  echo "Description: Kill all running Electron processes. Useful when the test harness crashes and leaves Electron popups behind."
+  echo "Description: Kill all running Electron & obs64 processes. Useful when the test harness crashes and leaves Electron popups behind."
   exit 0
 }
 
@@ -16,4 +16,5 @@ fi
 # and leaves Electron popups behind.
 pkill -9 -f Electron
 pkill -9 -f electron
+pkill -9 -f obs64
 echo "Done."
