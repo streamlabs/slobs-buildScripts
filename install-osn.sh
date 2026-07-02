@@ -66,13 +66,11 @@ done
 
 # Build and install into distribute folder.
 cmake --build build --target install "${cmake_args[@]}"
-
+exit_status=$?
 if [ ! -d "$distribution_dir" ]; then
   echo "$0 Error: 'OSN.app' directory is not found. Build obs-studio-node first."
   exit 1
 fi
-
-exit_status=$?
 
 if [ $exit_status -eq 0 ]; then
 
