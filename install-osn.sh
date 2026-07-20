@@ -44,10 +44,6 @@ fi
 
 distribution_dir="$origin_dir"/desktop/node_modules/obs-studio-node/OSN.app/distribute/obs-studio-node
 
-if [ ${#cmake_args[@]} -eq 0 ]; then
-  cmake_args+=(--config RelWithDebInfo)
-fi
-
 write_dsym=false
 for arg in "$@"
 do
@@ -59,6 +55,10 @@ do
     write_dsym=true
   fi
 done
+
+if [ ${#cmake_args[@]} -eq 0 ]; then
+  cmake_args+=(--config RelWithDebInfo)
+fi
 
 # Do not remove previous artifacts. This should only be used for a clean build. If you remove them, then the new build will not be able to find the old artifacts to copy into the new build.
 #rm -rf "$origin_dir/obs-studio-node/OSN.app/distribute/obs-studio-node"
